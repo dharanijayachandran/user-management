@@ -1,0 +1,63 @@
+<!-- begin page-header -->
+<h1 i18n="Page header|Manage Account header@@manageAccount.header" class="page-header">Manage Account<small></small></h1>
+<div class="header_Underline"></div>
+<!-- end page-header -->
+<!-- begin row -->
+<div class="row">
+  <!-- begin col-6 -->
+  <div class="col-lg-12">
+    <!-- begin nav-tabs -->
+    <ngb-tabset type="pills" class="nav-tabs-inverse" (tabChange)="beforeChange($event)">
+      <ngb-tab id="mngAccAccount">
+        <ng-template ngbTabTitle>
+          <span i18n="Tab|Account tab@@account" class="d-sm-none">Account</span>
+          <span i18n="Tab|Account tab@@account" class="d-sm-block d-none">Account</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="accountList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <app-account-view (messageEvent)="receiveMessage($event)" (tabName)="tabNameMessage()">
+            </app-account-view>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="mngMenu">
+        <ng-template ngbTabTitle>
+          <span i18n="Tab|Menu tab@@menu" class="d-sm-none">Menu</span>
+          <span i18n="Tab|Menu tab@@menu" class="d-sm-block d-none">Menu</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="menuList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <app-account-menu [accountValueChild]="gettingAccountDetail">
+            </app-account-menu>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="mngRole">
+        <ng-template ngbTabTitle>
+          <span i18n="Tab|Role tab@@role" class="d-sm-none">Role</span>
+          <span i18n="Tab|Role tab@@role" class="d-sm-block d-none">Role</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="accountRoleList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <app-account-role [accountValueChild]="gettingAccountDetail">
+            </app-account-role>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="mngUser">
+        <ng-template ngbTabTitle>
+          <span i18n="Tab|User tab@@user" class="d-sm-none">User</span>
+          <span i18n="Tab|User tab@@user" class="d-sm-block d-none">User</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="accountUserList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <app-account-user>
+            </app-account-user>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+  </div>
+  <!-- end col-6 -->
+</div>
+<!-- end row -->

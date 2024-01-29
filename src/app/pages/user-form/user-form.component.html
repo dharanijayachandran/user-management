@@ -1,0 +1,517 @@
+<!-- User form view starts here  -->
+<div [formGroup]="user" class="user">
+  <div class="form-group-custom1">
+    <legend i18n="Personal Details|Personal Details@@personalDetails" class="m-b-15">Personal Details</legend>
+    <div class="formBodyCustom1" id="userDetail">
+      <div class="m-form__group row">
+        <div class="col-md-3 col-lg-3">
+
+          <div class="form-group">
+            <div class="input-group d-block">
+              <label i18n="Salutation|Salutation@@salutation*" class="">Salutation
+              </label>
+              <div class="input-group-prepend" [ngClass]="{'has-error': ((user.get('salutationId').touched ||
+                  user.get('salutationId').dirty) &&
+                  user.get('salutationId').errors)}">
+                  <ejs-dropdownlist id='ddlelement' #ddlelement class="form-control p-0" [value]='salutationId' name="salutationId" formControlName="salutationId"
+						 [dataSource]='salutationList' [placeholder]='salutationWaterMark' [fields]='salutationFields'
+                        [popupHeight]='height' [sortOrder]="sort" (filtering)='onFilteringSalutation($event)'
+                        [filterBarPlaceholder]="filterPlaceholder" [allowFiltering]='true'
+                        (change)='salutationOnChange($event)' [locale]='locale'></ejs-dropdownlist>
+                <!-- <select id="salutationId" class="form-control" formControlName="salutationId"
+                  (change)=salutationChange($event)>
+                  <option i18n="Option|Select@@select" [ngValue]='null'>--Select--</option>
+                  <option *ngFor="let salutation of salutationId; let i = index" [value]="salutationId[i].id">
+                    {{salutationId[i].name}}</option>
+                </select> -->
+              </div>         
+            </div>
+            <span style=" margin-bottom: 0;" class="help-block" *ngIf="((user.get('salutationId').touched ||
+                                user.get('salutationId').dirty) &&
+                                user.get('salutationId').errors)">
+              <span i18n="Message|Please select Salutation@@salutation.message1" *ngIf="user.get('salutationId').errors.required">
+                Please select Salutation
+              </span>
+            </span>
+          </div>
+          <span id="firstNameValMsg" class="errorMsg"></span>
+        </div>
+        <div class="col-md-3">
+          <div>
+            <label i18n="First Name|First Name@@firstName*" class="">First Name<span class="text-danger">*</span></label>
+            <div
+              [ngClass]="{'has-error': ((user.get('firstName').touched || user.get('firstName').dirty) && user.get('firstName').errors)}">
+              <input (keyup)="onKey($event)" type="text" id="firstName" formControlName="firstName" class="form-control m-input"
+                i18n-placeholder="First name placeholder|Enter First Name@@firstName.placeholder" placeholder="Enter First Name" maxlength="100">
+              <span style=" margin-top: 0;" class="help-block" *ngIf="((user.get('firstName').touched ||
+                user.get('firstName').dirty) &&
+                user.get('firstName').errors)">
+                <span i18n="Message|Please enter First Name@@firstName.message1"
+                  *ngIf="(user.get('firstName').errors.required || user.get('firstName').errors.whitespace)">
+                  Please enter First Name
+                </span>
+                <span i18n="Message|Please enter less than 100 Characters@@firstName.message2" *ngIf="user.get('firstName').errors.maxlength"
+                  class="display_inherit">
+                  Please enter less than 100 Characters
+                </span>
+                <span i18n="Message|Please enter valid Characters@@firstName.message3" *ngIf="user.get('firstName').errors.pattern">
+                  Please enter valid Characters
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <label i18n="Middle Name|Middle Name@@middleName" class="">Middle Name</label>
+          <div class="form-group">
+            <div [ngClass]="{'has-error': ((user.get('middleName').dirty) &&
+                user.get('middleName').errors)}">
+              <input (keyup)="onKeyMiddle($event)" type="text" id="middleName" formControlName="middleName" class="form-control m-input"
+                i18n-placeholder="Middle name placeholder|Enter Middle Name@@middleName.placeholder" placeholder="Enter Middle Name">
+              <span class="help-block" *ngIf="((user.get('middleName').dirty) &&
+                                          user.get('middleName').errors)">
+                <span i18n="Message|Please enter less than 100 Characters@@middleName.message1" *ngIf="user.get('middleName').errors.maxlength"
+                  class="display_inherit">
+                  Please enter less than 100 Characters
+                </span>
+                <span i18n="Message|Please enter valid Characters@@middleName.message2" *ngIf="user.get('middleName').errors.pattern">
+                  Please enter valid Characters
+                </span>
+              </span>
+            </div>
+          </div>
+          <span id="middleNameValMsg" class="errorMsg"></span>
+        </div>
+        <div class="col-lg-3">
+          <label i18n="Last Name|Last Name@@lastName*" class="">Last Name<span class="text-danger">*</span></label>
+          <div class="form-group">
+            <div [ngClass]="{'has-error': ((user.get('lastName').touched ||
+                      user.get('lastName').dirty) &&
+                      user.get('lastName').errors)}">
+              <input (keyup)="onKeyLast($event)" type="text" id="userLastName" formControlName="lastName" class="form-control m-input"
+                i18n-placeholder="Enter Last Name|Enter Last Name placeholder@@lastName.placeholder" placeholder="Enter Last Name" maxlength="100">
+              <span class="help-block" *ngIf="((user.get('lastName').touched ||
+                                        user.get('lastName').dirty) &&
+                                        user.get('lastName').errors)">
+                <span i18n="Message|Please enter Last Name@@lastName.message"
+                  *ngIf="(user.get('lastName').errors.required || user.get('lastName').errors.whitespace)">
+                  Please enter Last Name
+                </span>
+                <span i18n="Message|Please enter less than 100 Characters@@lastName.message1" *ngIf="user.get('lastName').errors.maxlength" class="display_inherit">
+                  Please enter less than 100 Characters
+                </span>
+                <span i18n="Message|Please enter valid Characters@@lastName.message2" *ngIf="user.get('lastName').errors.pattern">
+                  Please enter valid Characters
+                </span>
+              </span>
+            </div>
+          </div>
+          <span id="userLastNameValMsg" class="errorMsg"></span>
+        </div>
+      </div>
+      <div class="m-form__group row">        
+        <div class="col-lg-6">
+          <label i18n="Gender|Gender@@gender">Gender
+            <!-- <span class="text-danger">*</span>  -->
+          </label>
+          <div class="form-group">
+            <!-- <div [ngClass]="{'has-error': ((user.get('gender').touched || user.get('gender').dirty) &&
+                user.get('gender').errors)}"> -->
+            <div>
+              <select id="gender" (change)="Selected($event)" formControlName="gender" class="form-control m-input"
+                >
+                <option i18n="Option|Selectgender@@selectgender" [ngValue]="null">--Select--</option>
+                <option i18n="Option|Female@@female" value="F">Female</option>
+                <option i18n="Option|Male@@male" value="M">Male</option>
+                <option i18n="Option|TransGender@@transGender" value="U">Trans-Gender</option>
+              </select>
+              <!-- <span class="help-block" *ngIf="((user.get('gender').touched ||
+                                user.get('gender').dirty) &&
+                                user.get('gender').errors)">
+                <span i18n="@@Gender*.message" *ngIf="user.get('gender').errors.required">
+                  Please select Gender
+                </span>
+              </span> -->
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <label i18n="DOB|DOB@@dOB">DOB
+          </label>
+          <div class="form-group">
+            <div>
+              <div class="input-group">
+                <input (click)="d2.toggle()" class="form-control" i18n-placeholder="YYYY-MM-DD placeholder|YYYY-MM-DD@@dOB.placeholder" placeholder="YYYY-MM-DD" formControlName="dateOfBirth"
+                  placement="bottom-right" ngbDatepicker #d2="ngbDatepicker" [minDate]="minDate" [maxDate]="todayDate"
+                  [markDisabled]="isDisabled">
+
+                <div class="input-group-append" style="padding-left: 1px;">
+                  <button class="btn btn-outline-secondary" (click)="d2.toggle()" type="button">
+                    <i class="fa fa-calendar"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <span id="dateOfBirthValMsg" class="errorMsg"></span>
+          </div>
+        </div>
+      </div>
+      <div class="m-form__group row">
+     
+        <div class="col-lg-3">
+          <label i18n="Status|Status@@status">Status
+            <!-- <span class="text-danger">*</span> -->
+          </label>
+          <div class="form-group">
+            <mat-radio-group formControlName="status">
+              <mat-radio-button value="Active" i18n="Radio button|Active@@active" style="margin-right: 20px;" id="userStatusActive">Active
+              </mat-radio-button>
+              <mat-radio-button value="In_Active" i18n="Radio button|InActive@@inActive" id="userStatusInActive">In-Active</mat-radio-button>
+            </mat-radio-group>
+          </div>
+        </div> 
+        <div class="col-lg-3">
+          <label i18n="IsAdmin|Admin User@@isAdmin">Admin User
+            <!-- <span class="text-danger">*</span> -->
+          </label>
+          <div class="form-group">
+            <mat-radio-group formControlName="isAdmin" >
+              <mat-radio-button [value]="true" i18n="Radio button|Yes@@yes" style="margin-right: 20px;" id="isAdminUserY" [disabled]="isEditable == false">Yes
+              </mat-radio-button>
+              <mat-radio-button [value]="false" i18n="Radio button|No@@no" id="isAdminUserN">No</mat-radio-button>
+            </mat-radio-group>
+          </div>
+          <span id="isAdminUserValMsg" class="errorMsg"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="path"></div>
+
+  <div class="form-group-custom1">
+    <legend i18n="Contact Information header|Contact Information@@contactInformation" class="m-b-15">Contact Information</legend>
+    <div class="formBodyCustom1" id="contactInfo">
+      <div class="m-form__group row">
+        <div class="col-lg-6">
+          <label i18n="E-mailID|E-mailID@@e-mailID*">E-mail ID<span class="text-danger">*</span> </label>
+          <div class="form-group">
+            <div [ngClass]="{'has-error': ((user.get('emailId').touched ||
+                  user.get('emailId').dirty) &&
+                  user.get('emailId').errors)}">
+              <input type="email" (focusout)="checkEmailAvilability($event)" formControlName="emailId" id="emailId" class="form-control m-input"
+                i18n-placeholder="Enter E-mail Id placeholder|Enter E-mail Id@@e-mailID.placeholder" placeholder="Enter E-mail Id">
+              <span class="help-block" *ngIf="((user.get('emailId').touched ||
+                                    user.get('emailId').dirty) &&
+                                    user.get('emailId').errors)">
+                <span i18n="Message|Please enter E-mail ID@@e-mailID.message" *ngIf="user.get('emailId').errors.required">
+                  Please enter E-mail ID
+                </span>
+                <span i18n="Message|Please enter valid E-mail ID@@e-mailID.message1" *ngIf="user.get('emailId').errors.email">
+                  Please enter valid E-mail ID
+                </span>
+                <span i18n="Message|Email already exist.Please enter unique email@@e-mailID.message2" *ngIf="user.get('emailId').errors.emailIdAlreadyExit">
+                  Email already exist.Please enter unique email
+                </span>
+              </span>
+
+            </div>
+            <!-- <span id="emailIdValMsg" class="errorMsg"></span> -->
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <label i18n="Skype ID|Skype ID@@skypeID">Skype ID</label>
+          <div class="form-group">
+            <input type="text" id="skypeId" formControlName="skypeId" class="form-control m-input"
+              i18n-placeholder="Skype ID placeholder|Enter Skype ID@@skypeID.placeholder" placeholder="Enter Skype ID">
+
+          </div>
+          <span id="skypeIdValMsg" class="errorMsg"></span>
+        </div>
+      </div>
+      <div class="m-form__group row">
+        <div class="col-lg-6">
+          <label i18n="Mobile Number|Mobile Number@@mobile.primary*">Mobile Number<span class="text-danger">*</span></label>
+          <div class="form-group">
+            <div [ngClass]="{'has-error': ((user.get('mobileNumberPrimary').touched ||
+              user.get('mobileNumberPrimary').dirty) &&
+              user.get('mobileNumberPrimary').errors)}">
+              <input type="text" id="mobileNumberPrimary" formControlName="mobileNumberPrimary"
+                onkeypress="onlyNumeric(this);" class="form-control m-input"
+                i18n-placeholder="Mobile Number placeholder|Enter Mobile Number@@mobile.primary.placeholder" placeholder="Enter Mobile Number">
+              <span class="help-block" *ngIf="((user.get('mobileNumberPrimary').touched ||
+                                user.get('mobileNumberPrimary').dirty) &&
+                                user.get('mobileNumberPrimary').errors)">
+                <span i18n="Message|Please enter Mobile Number@@mobile.primary.message" *ngIf="user.get('mobileNumberPrimary').errors.required">
+                  Please enter Mobile Number
+                </span>
+                <span i18n="Message|Please enter only Numbers@@mobile.primary.message1" *ngIf="user.get('mobileNumberPrimary').errors.pattern"
+                  class="display_inherit">
+                  Please enter only Numbers
+                </span>
+                <!-- <span i18n="@@Mobile.Primary*.message2" *ngIf="user.get('mobileNumberPrimary').errors.pattern">
+                            Please Enter Numeric Phone Number
+                        </span> -->
+              </span>
+            </div>
+            <span id="mobileNumberPrimaryValMsg" class="errorMsg"></span>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <label i18n="Mobile Number Alternate|Mobile Number Alternate@@mobileNumberAlternate">Mobile Number (Alternate)</label>
+          <div class="form-group">
+            <div [ngClass]="{'has-error': ((user.get('mobileNumberSecondary').touched ||
+              user.get('mobileNumberSecondary').dirty) &&
+              user.get('mobileNumberSecondary').errors)}">
+
+              <input type="text" id="mobileNumberSecondary" formControlName="mobileNumberSecondary"
+                onkeypress="onlyNumeric(this);" class="form-control m-input"
+                i18n-placeholder="Mobile Number (Alternate) placeholder|Enter Mobile Number (Alternate)@@mobileNumberAlternate.placeholder" placeholder="Enter Mobile Number (Alternate)"
+                >
+              <span class="help-block" *ngIf="((user.get('mobileNumberSecondary').touched ||
+                        user.get('mobileNumberSecondary').dirty) &&
+                        user.get('mobileNumberSecondary').errors)">
+                <span i18n="Message|Please enter only Numbers@@mobileNumberAlternate.message" *ngIf="user.get('mobileNumberSecondary').errors.pattern"
+                  class="display_inherit">
+                  Please enter only Numbers
+                </span>
+                <!-- <span i18n="@@Mobile.Secondary.message2" *ngIf="user.get('mobileNumberSecondary').errors.pattern">
+                    Please Enter Numeric Phone Number
+                </span> -->
+              </span>
+            </div>
+            <span id="mobileNumberSecondaryValMsg" class="errorMsg"></span>
+          </div>
+        </div>
+      </div>
+      <div class="m-form__group row">
+        <div class="col-lg-6">
+          <label i18n="Phone Number|Phone Number@@phoneNumber">Phone Number
+            <!-- <span class="text-danger">*</span> -->
+          </label>
+          <div class="form-group">
+            <div [ngClass]="{'has-error': ((user.get('phoneNumberPrimary').touched ||
+              user.get('phoneNumberPrimary').dirty) &&
+              user.get('phoneNumberPrimary').errors)}">
+
+              <input formControlName="phoneNumberPrimary" type="text" id="phoneNumberPrimary"
+                onkeypress="onlyNumeric(this);" class="form-control m-input"
+                i18n-placeholder="Phone Number|Enter Phone Number@@phoneNumber.placeholder" placeholder="Enter Phone Number" />
+              <span class="help-block" *ngIf="((user.get('phoneNumberPrimary').touched ||
+                        user.get('phoneNumberPrimary').dirty) &&
+                        user.get('phoneNumberPrimary').errors)">
+                <span i18n="Message|Please Enter Phone Number@@phoneNumber.message1" *ngIf="user.get('phoneNumberPrimary').errors.required">
+                  Please Enter Phone Number
+                </span>
+                <span i18n="Message|Please enter only Numbers@@phoneNumber.message2" *ngIf="user.get('phoneNumberPrimary').errors.pattern"
+                  class="display_inherit">
+                  Please enter only Numbers
+                </span>
+              </span>
+            </div>
+            <span id="phoneNumberPrimaryValMsg" class="errorMsg"></span>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <label i18n="Phone Number Alternate|Phone Number Alternate@@phoneNumberAlternate">Phone Number (Alternate)</label>
+          <div class="form-group">
+            <div [ngClass]="{'has-error': ((user.get('phoneNumberSecondary').touched ||
+                user.get('phoneNumberSecondary').dirty) &&
+                user.get('phoneNumberSecondary').errors)}">
+
+              <input type="text" id="phoneNumberSecondary" formControlName="phoneNumberSecondary"
+                onkeypress="onlyNumeric(this);" class="form-control m-input"
+                i18n-placeholder="Phone Number Alternate|Enter Phone Number (Alternate)@@phoneNumberAlternate.placeholder" placeholder="Enter Phone Number (Alternate)">
+              <span class="help-block" *ngIf="((user.get('phoneNumberSecondary').touched ||
+                          user.get('phoneNumberSecondary').dirty) &&
+                          user.get('phoneNumberSecondary').errors)">
+                <span i18n="Message|Please Enter Phone Number@@phoneNumberAlternate.message1" *ngIf="user.get('phoneNumberSecondary').errors.minlength">
+                  Please Enter Phone Number
+                </span>
+                <span i18n="Message|Please enter only Numbers@@phoneNumberAlternate.message2" *ngIf="user.get('phoneNumberSecondary').errors.pattern"
+                  class="display_inherit">
+                  Please enter only Numbers
+                </span>
+              </span>
+            </div>
+            <span id="phoneNumberSecondaryValMsg" class="errorMsg"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="path"></div>
+
+
+  <div class="form-group-custom1">
+    <legend i18n="Address Details header|Address Details@@addressDetails" class="m-b-15">Address Details</legend>
+    <div class="formBodyCustom1" id="addressDetail">
+      <div class="form-group m-form__group row">
+        <div class="col-lg-6">
+          <label i18n="Address|Address@@address">Address
+            <!-- <span class="text-danger">*</span> -->
+          </label>
+          <div [ngClass]="{'has-error': ((user.get('street').touched ||
+                user.get('street').dirty) &&
+                user.get('street').errors)}">
+            <input type="text" id="street" formControlName="street" class="form-control m-input"
+              i18n-placeholder="Address Line 1|Enter Address Line 1@@address1.placeholder" placeholder="Enter Address Line 1">
+            <span class="help-block" *ngIf="((user.get('street').touched ||
+                        user.get('street').dirty) &&
+                        user.get('street').errors)">
+              <span i18n="Message|Please enter Address line 1@@address1.message" *ngIf="user.get('street').errors.required">
+                Please enter Address line 1
+              </span>
+            </span>
+          </div>
+        </div>
+        <div class="col-lg-6">
+          <label i18n="Address|Address@@address" class="visiblity-hidden">Address
+            <!-- <span class="text-danger">*</span> -->
+          </label>
+          <input type="text" id="userAddress2" formControlName="userAddress2" class="form-control m-input"
+            i18n-placeholder="Address Line 2|Enter Address Line 2@@address2.placeholder" placeholder="Enter Address Line 2">
+          <span id="userAddress2ValMsg" class="errorMsg"></span>
+        </div>
+      </div>
+      <div class="m-form__group row">
+        <div class="col-lg-3">
+          <label i18n="Zip Code|Zip Code@@zipCode" class="">Zip Code
+            <!-- <span class="text-danger">*</span> -->
+          </label>
+          <div class="form-group">
+            <div [ngClass]="{'has-error': ((user.get('zipcode').touched ||
+                user.get('zipcode').dirty) &&
+                user.get('zipcode').errors)}">
+              <div class="m-input-icon m-input-icon--right">
+                <input type="text" id="zipcode" formControlName="zipcode" class="form-control m-input"
+                  onkeypress="onlyNumeric(this);" i18n-placeholder="Zip Code placeholder|Enter Zip Code@@zipCode.placeholder"
+                  placeholder="Enter Zip Code">
+                <span class="help-block" *ngIf="((user.get('zipcode').touched ||
+                          user.get('zipcode').dirty) &&
+                          user.get('zipcode').errors)">
+                  <span i18n="Message|Please enter Zip Code@@zipCode.message" *ngIf="user.get('zipcode').errors.required">
+                    Please enter Zip Code
+                  </span>
+                </span>
+              </div>
+              <span id="zipcodeValMsg" class="errorMsg"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <label i18n="City/Town|City/Town@@city/Town">City/Town
+            <!-- <span class="text-danger">*</span> -->
+          </label>
+          <div class="form-group">
+            <div [ngClass]="{'has-error': ((user.get('city').touched ||
+                user.get('city').dirty) &&
+                user.get('city').errors)}">
+              <div class="m-input-icon m-input-icon--right">
+                <input type="text" id="city" formControlName="city" class="form-control m-input"
+                  i18n-placeholder="City/Town placeholder|Enter City/Town@@city/Town.placeholder" placeholder="Enter City/Town">
+                <span class="help-block" *ngIf="((user.get('city').touched ||
+                          user.get('city').dirty) &&
+                          user.get('city').errors)">
+                  <span i18n="Message|Please enter City/Town@@city/Town.message" *ngIf="user.get('city').errors.required">
+                    Please enter City/Town
+                  </span>
+                </span>
+              </div>
+              <span id="cityValMsg" class="errorMsg"></span>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-3">
+          <label i18n="Country|Country@@ountry" class="">Country
+            <!-- <span class="text-danger">*</span> -->
+          </label>
+          <div class="form-group">
+            <ejs-dropdownlist id='ddlelement' #ddlelement class="form-control p-0" [value]='countryId' name="countryId" formControlName="countryId"
+						 [dataSource]='countryList' [placeholder]='countryWaterMark' [fields]='countryFields'
+                        [popupHeight]='height' [sortOrder]="sort" (filtering)='onFiltering($event)'
+                        [filterBarPlaceholder]="filterPlaceholder" [allowFiltering]='true'
+                        (change)='counrtyOnChange($event)' [locale]='locale'></ejs-dropdownlist>
+            <!-- <select (change)="getStateByCountryId($event.target.value, true)" id="userCountryId"
+              formControlName="countryId" class="form-control m-input">
+              <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+              <option *ngFor="let country of countryList" [value]="country.id">{{country.name}} </option>
+            </select> -->
+          </div>
+          <span id="userCountryIdValMsg" class="errorMsg"></span>
+        </div>
+        <div class="col-lg-3">
+          <label i18n="State|State@@state*">State
+            <!-- <span class="text-danger">*</span>  -->
+          </label>
+          <div class="form-group">
+            <div class="input-group m-input-group m-input-group--square">
+              <ejs-dropdownlist id='ddlelement' #ddlelement class="form-control p-0" [value]='stateId' name="stateId" formControlName="stateId"
+							[dataSource]='stateList' [placeholder]='stateWaterMark' [fields]='stateFields'
+						   [popupHeight]='height' [sortOrder]="sort" (filtering)='onFilteringState($event)'
+						   [filterBarPlaceholder]="filterPlaceholder" [allowFiltering]='true'
+						   (change)='stateOnChange($event)' [locale]='locale'></ejs-dropdownlist>
+              <!-- <select id="userStateId" formControlName="stateId" class="form-control m-input"
+                (change)="getStateName($event)">
+                <option i18n="Option|Select@@select" [ngValue]="null">--Select--</option>
+                <option *ngFor="let state of stateList" [value]="state.id">{{state.name}} </option>
+              </select> -->
+
+            </div>
+            <span id="stateIdValMsg" class="errorMsg"></span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- <div class="form-group-custom1">
+      <legend i18n="@@StatusInfo" class="m-b-15">Status Info</legend>
+      <div class="formBodyCustom1">
+        <div class="form-group m-form__group row">
+          <div class="col-lg-4">
+            <label i18n="@@Status*">Status *</label>
+            <div>
+              <div class="m-checkbox-inline">
+                <label i18n="@@Active" class="m-radio">
+                  <input type="radio" formControlName="status" id="userStatusA" value="Active" [(ngModel)]='status'
+                    [checked]='true'> Active
+                  <span></span>
+                </label> &nbsp;
+                <label i18n="@@InActive" class="m-radio">
+                  <input type="radio" formControlName="status" id="userStatusI" [(ngModel)]='status'
+                    value="In_Active"> In-Active
+                  <span></span>
+                </label>
+              </div>
+
+            </div>
+            <span id="userStatusValMsg" class="errorMsg"></span>
+          </div>
+          <div class="col-lg-4">
+            <label i18n="@@IsAdmin?*">Admin User*</label>
+            <div> 
+              <div class="m-checkbox-inline">
+                <label i18n="@@Yes" class="m-radio">
+                  <input type="radio" formControlName="isAdmin" id="isAdminUserY" [value]="true"
+                    [(ngModel)]='isAdmin'>
+                  Yes
+                  <span></span>
+                </label>
+                <label i18n="@@No" class="m-radio">
+                  <input type="radio" formControlName="isAdmin" id="isAdminUserN" [value]="false"
+                    [(ngModel)]='isAdmin' [checked]='true'>
+                  No
+                  <span></span>
+                </label>
+
+              </div>
+            </div>
+            <span id="isAdminUserValMsg" class="errorMsg"></span>
+          </div>
+        </div>
+      </div>
+    </div> -->
+</div>

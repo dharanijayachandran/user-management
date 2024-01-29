@@ -1,0 +1,107 @@
+<!-- begin page-header -->
+<h1 i18n="Header page|Assign Menus@@assignMenusNoIpn" class="page-header">Assign Menus</h1>
+<!-- end page-header -->
+
+<div class="panel panel-inverse" style="position: relative">
+  <app-panel-user i18n-name="Menus panel|Organization Menus@@organizationMenus" name="Organization Menus: {{ownerDetailList ? ownerDetailList.ownerName : ''}}" #panelHeader
+    (refreshTableList)="refreshTableListFunction()">
+
+    <!-- Input field for search -->
+    <input searchfield style="display: none;" id="filter" class="form-control m-input ml-2"
+      (input)="filterChanged($event.target.value)" i18n-placeholder="Search|Search placeholder@@search" matInput placeholder="Search.." />
+
+    <!-- Search button -->
+    <a searchButton href="javascript:;" i18n-matTooltip="Search button|Click to Search@@clickToSearch" matTooltip="Click to Search" class="btn btn-xs btn-icon btn-circle btn-default"
+      (click)="panelHeader.searchButton()">
+      <i class="fa fa-search"></i>
+    </a>
+    <div class="row margin_0px rowBox">
+      <div class="col-md-12 padding_0px">
+        <div class="padding_Form formReadMode">
+          <div class="form-group-custom1">
+            <!-- <legend i18n="@@OrganizationMenus" class="m-b-15">
+              Organization Menus: {{ownerDetailList.ownerName}}
+            </legend> -->
+            <div class="row" [formGroup]="applicationForm">
+            <div class="col-lg-4">
+              <label i18n="Application|Application@@application">Application<span class="text-danger">*</span></label>
+              <div class="form-group">
+                <div [ngClass]="{'has-error': ((applicationForm.get('applicationCode').touched ||
+                applicationForm.get('applicationCode').dirty) &&
+                applicationForm.get('applicationCode').errors)}">
+                <ejs-dropdownlist id='ddlelement' #ddlelement class="form-control p-0"
+                  name="applicationCode" formControlName="applicationCode" [dataSource]='applications'
+                  [placeholder]='applicationWaterMark' [fields]='applicationFields' [popupHeight]='height'
+                  [sortOrder]="sortDropDown" (filtering)='onFilteringApplication($event)'
+                  [filterBarPlaceholder]="filterPlaceholder" [allowFiltering]='true' (change)='applicationOnChange($event)'>
+                </ejs-dropdownlist>
+
+                  <span class="help-block" *ngIf="((applicationForm.get('applicationCode').touched ||
+                  applicationForm.get('applicationCode').dirty) &&
+                  applicationForm.get('applicationCode').errors)">
+                      Please select Application
+                  </span>
+                </div>
+              </div>
+            </div>
+            </div>
+              <h3 i18n="No records found text|No records found@@noRecordsFound" class="text-center noRecordsFound" *ngIf="noRecordBlock">
+                No records found!
+              </h3>
+              <!-- Loader image  -->
+              <div *ngIf="showLoaderImage" class="col-lg-12 loaderImageStyle" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+                align="center">
+                <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+              </div>
+            <div class="row position-relative" *ngIf="assignMenusBlock"
+            [ngStyle]="assignMenusBlock ? {'height': 'calc(100vh - 235px)'} : {}" appScrollbarDirective>
+              <div class="col-lg-12">
+                <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                  <mat-tree-node *matTreeNodeDef="let node" [hidden]="!node.visible" matTreeNodeToggle
+                    matTreeNodePadding>
+                    <button mat-icon-button disabled></button>
+                    <mat-checkbox class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)"
+                      (change)="todoLeafItemSelectionToggle(node)">{{node.name}}</mat-checkbox>
+                  </mat-tree-node>
+
+                  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" [hidden]="!node.visible" matTreeNodePadding>
+                    <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
+                      <mat-icon class="mat-icon-rtl-mirror">
+                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                      </mat-icon>
+                    </button>
+                    <mat-checkbox [checked]="descendantsAllSelected(node)"
+                      [indeterminate]="descendantsPartiallySelected(node)" (change)="todoItemSelectionToggle(node)">
+                      {{node.name}}</mat-checkbox>
+                  </mat-tree-node>
+                </mat-tree>
+              </div>
+            </div>
+          </div>
+          <div class="path finalLine" *ngIf="assignMenusBlock"></div>
+          <div class="row" *ngIf="assignMenusBlock">
+            <div class="col-md-12">
+              &nbsp;
+              <button type="button" [disabled]="menuDirtyStatus" id="resetOwner" class="btn btn-secondary text-center resetActionButton" (click)="resetOwnerMenu()"
+              i18n="Reset button|Reset@@reset"> Reset
+              </button>
+              &nbsp;
+              <span i18n-matTooltip="Tooltip validation|Select atleast one Menu@@SelectAtLeastOneMenu" matTooltip="Select atleast one Menu"
+                [matTooltipDisabled]="!saveButtonDisableStatus">
+                <button i18n="Save button|Save@@save" class="btn btn-primary text-center saveActionButton" type="submit" (click)="SaveOwnerMenu()"
+                  [disabled]='saveButtonDisableStatus'>
+                  Save</button>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-panel-user>
+</div>
+
+
+  <!-- Global modal notification component selector for cancel and final save form-->
+  <app-modal-notification (modelNotificationSuccess)="redirectTo()" (modelNotificationWarning)="alertRedirection()">
+  </app-modal-notification>
+

@@ -1,0 +1,20 @@
+.margin_top_25px {
+    margin-top: 22px;
+  }
+  @media screen and (max-width: 767px) {
+    .margin_top_25px {
+      margin-top: 0px;
+    }
+  }
+  .mat-column-name {
+    width: auto;
+}
+.mat-column-isAdmin {
+  width: 30%;
+}
+.mat-column-email {
+  width: 30%;
+}
+.divHeight{
+  height: 40px;
+}

@@ -1,0 +1,65 @@
+<!-- begin page-header -->
+<h1 i18n="@@ManageDataAccess" class="page-header classname">Manage Data Access</h1>
+<div class="header_Underline"></div>
+<!-- end page-header -->
+
+<!-- begin row -->
+<div class="row">
+    <!-- begin col-6 -->
+    <div class="col-lg-12 ">
+        <!-- begin nav-tabs -->
+        <ngb-tabset type="pills" class="hide_content" (tabChange)="beforeChange($event)">
+            <!-- begin Asset Access tab -->
+            <ngb-tab id="manageAsset">
+                <ng-template ngbTabTitle>
+                    <span i18n="Asset tab|Asset@@asset" class="d-sm-none">Asset</span>
+                    <span i18n="Asset tab|Asset@@asset" class="d-sm-block d-none">Asset</span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <div id="assetAccessId" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+                        <app-asset-data-access (messageEvent)="receiveMessage($event);" (tabName)="tabNameMessage()">
+                        </app-asset-data-access>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <!-- End Asset Access tab -->
+            <!-- begin Gateway Access tab -->
+            <ngb-tab id="manageGateway">
+                <ng-template ngbTabTitle>
+                    <span i18n="Gateway tab|Gateway@@gateway" class="d-sm-none">Gateway</span>
+                    <span i18n="Gateway tab|Gateway@@gateway" class="d-sm-block d-none">
+                        Gateway
+                    </span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <div id="gatewayAccessId" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+                        <app-gateway-data-access (messageEvent)="receiveMessage($event);" (tabName)="tabNameMessage()">
+                        </app-gateway-data-access>
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <!-- End Gateway Access tab -->
+            <!-- begin Dashboard Access tab -->
+            <ngb-tab id="manageDashboard">
+                <ng-template ngbTabTitle>
+                    <span i18n="Dashboard tab|Dashboard@@dashboard" class="d-sm-none">Dashboard</span>
+                    <span i18n="Dashboard tab|Dashboard@@dashboard" class="d-sm-block d-none">
+                        Dashboard
+                    </span>
+                </ng-template>
+                <ng-template ngbTabContent>
+                    <div id="dashboardAccessId" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+                        <app-dashboard-data-access (messageEvent)="receiveMessage($event);" (tabName)="tabNameMessage()">
+                        </app-dashboard-data-access>
+                        <!-- This recevie message event handler uses for tab navigation -->
+                    </div>
+                </ng-template>
+            </ngb-tab>
+            <!-- End Dashboard Access tab -->
+        </ngb-tabset>
+        <!-- end nav-tabs -->
+    </div>
+    <!-- end col-6 -->
+
+</div>
+<!-- end row -->

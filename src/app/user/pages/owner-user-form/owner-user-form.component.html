@@ -1,0 +1,221 @@
+<!-- Form view stars here -->
+
+
+<div class="row">
+    <div class="col-md-12">
+        <h1 i18n="Page header|User@@user" class="page-header" *ngIf="userFormViewMode">
+            {{addEditText}} User
+        </h1>
+        <h1 i18n="Page header|Preview user@@previewUser" class="page-header" *ngIf="userReadModeView">
+            Preview {{addEditText}} User
+        </h1>
+    </div>
+</div>
+<div class="row margin_0px rowBox margin_top_5px">
+    <div class="col-md-12 padding_0px">
+        <div class="padding_Form">
+            <form [formGroup]="userForm" novalidate (ngSubmit)="previewUser()" name="formGroup"
+                *ngIf="userFormViewMode">
+
+                <app-user-form [group]="userForm.controls['user']"></app-user-form>
+
+                <div class="path finalLine"></div>
+                <div class="row" style="    text-align: right;padding: 23px 0;">
+                    <div class="col-md-12">
+                        <a (click)="cancelUserForm()">
+                            <button type="button" id="cancelUser" class="btn btn-default text-center cancelActionButton" i18n="Cancel button|Cancel@@cancel">
+                                Cancel
+                            </button>
+                        </a>
+                        &nbsp;
+                        <button type="button" id="resetUser" class="btn btn-secondary text-center resetActionButton"
+                            [disabled]="!userForm.dirty && userForm.pristine || !userForm.dirty && !userForm.pristine"
+                            (click)="resetUserForm()" i18n="Reset button|Reset@@reset"> Reset </button>
+                        &nbsp;
+                        <span i18n-matTooltip="@@Fillthemandatoryfields" matTooltip="Fill the mandatory fields" [matTooltipDisabled]="userForm.valid">
+                            <button i18n="Review&Save button|Review&Save@@review&Save" id="addUser" class="btn btn-primary text-center reviewAndSaveActionButton" type="submit"
+                                [disabled]="!userForm.valid">
+                                Review & Save</button>
+                        </span>
+                    </div>
+                </div>
+            </form>
+
+            <!-- User form read mode view starts here  -->
+            <div *ngIf="userReadModeView" class="formReadMode">
+                <div class="form-group-custom1">
+                    <legend i18n="User detail header|User Detail@@userDetail" class="m-b-15">User Details</legend>
+                    <div class="form-row">
+                        <a (click)="backButton('userDetail')" class="edit_section">
+                            <img src="/assets/img/action/edit.png" alt="edit User Details"
+                            i18n-matTooltip="User Details|Click to edit User Details@@clickToEditUserDetails"   matTooltip="Click to edit User Details">
+                        </a>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label i18n="Salutation|Salutation@@salutation" class="">Salutation</label>
+                                    <p>
+                                      {{user["user"]["salutationName"] | hyphen}}
+                                    </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label i18n="First Name|First Name@@firstName" class="">First Name</label>
+                            <p>
+                                {{user["user"]["firstName"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label i18n="Middle Name|Middle Name@@middleName" class="">Middle Name</label>
+                            <p>
+                                {{user["user"]["middleName"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label i18n="Last Name|Last Name@@lastName" class="">Last Name</label>
+                            <p>
+                                {{user["user"]["lastName"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6">
+                            <label i18n="Gender|Gender@@gender" class="">Gender</label>
+                            <p>
+                                {{user["user"]["genderName"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-4 col-md-4">
+                            <label i18n="DOB|DOB@@dOB" class="">DOB</label>
+                            <p *ngIf="user['user']['dateOfBirth'] != null else noBlock">
+                                {{user["user"]["dateOfBirth"]["day"]}}/{{user["user"]["dateOfBirth"]["month"]}}/{{user["user"]["dateOfBirth"]["year"]}}
+                            </p>
+                            <ng-template #noBlock>
+                                <p>
+                                    -
+                                </p>
+                            </ng-template>
+                        </div>
+                        <div class="form-group col-sm-4 col-md-3">
+                            <label i18n="Status|Status@@status" class="">Status</label>
+                            <p>
+                                {{user["user"]["status"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-4 col-md-3">
+                            <label i18n="IsAdmin|Admin user@@isAdmin" class="">Admin User</label>
+                            <p *ngIf="user['user']['isAdmin'] == true else adminUserNoBlock">
+                                Yes
+                            </p>
+                            <ng-template #adminUserNoBlock>
+                                <p>
+                                   No 
+                                </p>
+                            </ng-template>
+                        </div>
+                    </div>
+                    <div class="path"></div>
+                    <legend i18n="Contact Information header|Contact Information@@contactInformation" class="m-b-15">Contact Information</legend>
+                    <div class="form-row">
+                        <a (click)="backButton('contactInfo')" class="edit_section">
+                            <img src="/assets/img/action/edit.png"
+                                alt="Click to edit Contact Information" i18n-matTooltip="Contact Information|Click to edit Contact Information@@clickToEditContactInformation" matTooltip="Click to edit Contact Information">
+                        </a>
+                        <div class="form-group col-sm-6 col-md-6">
+                            <label i18n="E-mail ID|E-mail ID@@emailID" class="">E-mail ID</label>
+                            <p>
+                                {{user["user"]["emailId"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6">
+                            <label i18n="Skype ID|Skype ID@@skypeID" class="">Skype ID</label>
+                            <p>
+                                {{user["user"]["skypeId"] | hyphen}}
+                            </p>
+                        </div>
+
+                        <div class="form-group col-sm-6 col-md-6">
+                            <label i18n="Mobile Number|Mobile Number@@mobileNumber" class="">Mobile Number</label>
+                            <p>
+                                {{user["user"]["mobileNumberPrimary"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6">
+                            <label i18n="Mobile Number Alternate|Mobile Number Alternate@@mobileNumberAlternate" class="">Mobile Number (Alternate)</label>
+                            <p>
+                                {{user["user"]["mobileNumberSecondary"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6">
+                            <label i18n="Phone Number|Phone Number@@phoneNumber" class="">Phone Number</label>
+                            <p>
+                                {{user["user"]["phoneNumberPrimary"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-6">
+                            <label i18n="Phone Number Alternate|Phone Number Alternate@@phoneNumberAlternate" class="">Phone Number (Alternate)</label>
+                            <p>
+                                {{user["user"]["phoneNumberSecondary"] | hyphen}}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="path"></div>
+                    <legend i18n="Address Details|Address Details@@addressDetails" class="m-b-15 ">Address Details</legend>
+                    <div class="form-row">
+                        <a (click)="backButton('addressDetail')" class="edit_section">
+                            <img src="/assets/img/action/edit.png" alt="Click to edit Address Details"
+                            i18n-matTooltip="Image tooltip|Click to edit Address Details@@clickToEditAddressDetails"   matTooltip="Click to edit Address Details">
+                        </a>
+                        <div class="form-group col-md-12">
+                            <label i18n="Address|Address@@address" class="">Address</label>
+                            <p class="mb-3">
+                                {{user["user"]["street"] | hyphen}}
+                            </p>
+                            <p>
+                                {{user["user"]["userAddress2"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label i18n="ZipCode|ZipCode@@zipCode" class="">Zip Code</label>
+                            <p>
+                                {{user["user"]["zipcode"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label i18n="City/Town|City/Town@@city/Town" class="">City/Town</label>
+                            <p>
+                                {{user["user"]["city"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label i18n="Country|Country@@country" class="">Country</label>
+                            <p>
+                                {{user["user"]["countryName"] | hyphen}}
+                            </p>
+                        </div>
+                        <div class="form-group col-sm-6 col-md-3">
+                            <label i18n="State|State@@state" class="">State</label>
+                            <p>
+                                {{user["user"]["stateName"] | hyphen}}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="path finalLine"></div>
+                <div class="row" style="    text-align: right;padding: 23px 0;">
+                    <div class="col-md-12">
+                        <button type="button" class="btn btn-default text-center backActionButton" (click)="backButton($event)" i18n="Back button|Back@@back">
+                            Back
+                        </button>
+                        &nbsp;
+                        <button i18n="Save button|Save@@save" class="btn btn-primary text-center saveActionButton" type="submit"
+                            (click)="saveUserInfo()">
+                            Save</button>
+                    </div>
+                </div>
+            </div>
+            <!-- User form read mode view ends here  -->
+        </div>
+    </div>
+</div>
+<!-- Loader image  -->
+<div *ngIf="showLoaderImage" class="col-lg-12 loaderImageStyle" style="margin-left:0%; margin-top:0%;margin-bottom:0%;" align="center">
+    <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+  </div>
+<!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification (modelNotificationWarning)="resetAccountUserForm()" (modelNotificationSuccess)="redirectTo()"></app-modal-notification>

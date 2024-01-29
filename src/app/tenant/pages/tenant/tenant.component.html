@@ -1,0 +1,67 @@
+<!-- begin page-header -->
+<h1 i18n="@@ManageTenant" class="page-header classname">Manage Tenant</h1>
+<div class="header_Underline"></div>
+<!-- end page-header -->
+<!-- begin row -->
+<div class="row">
+  <!-- begin col-6 -->
+  <div class="col-lg-12 ">
+    <!-- begin nav-tabs -->
+    <ngb-tabset type="pills" class="hide_content" (tabChange)="beforeChange($event)">
+      <ngb-tab id="mngTenant">
+        <ng-template ngbTabTitle>
+          <span i18n="Tenant tab|Tenant@@tenant" class="d-sm-none">Tenant</span>
+          <span i18n="Tenant tab|Tenant@@tenant" class="d-sm-block d-none">Tenant</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="tenantView" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight" >
+            <app-tenant-view (messageEvent)="receiveMessage($event);" (tabName)="tabNameMessage()"></app-tenant-view>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="mngMenu">
+        <ng-template ngbTabTitle>
+          <span i18n="Menu tab|Menu@@tenantMenu" class="d-sm-none">Menu</span>
+          <span i18n="Menu tab|Menu@@tenantMenu" class="d-sm-block d-none">
+            Menu
+          </span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="menuList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <app-tenant-menu [tenantValueChild]="gettingTenantDetail"></app-tenant-menu>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="mngRole">
+        <ng-template ngbTabTitle>
+          <span i18n="Role tab|Role@@tenantRole" class="d-sm-none">Role</span>
+          <span i18n="Role tab|Role@@tenantRole" class="d-sm-block d-none">
+            Role
+          </span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="tenantRoleList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <!-- This recevie message event handler uses for tab navigation -->
+            <app-tenant-role [tenantValueChild]="gettingTenantDetail"></app-tenant-role>
+          </div>
+        </ng-template>
+      </ngb-tab>
+      <ngb-tab id="mngUser">
+        <ng-template ngbTabTitle>
+          <span i18n="User tab|User@@user" class="d-sm-none">User</span>
+          <span i18n="User tab|User@@user" class="d-sm-block d-none">User</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="tenantUserList" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <!-- This recevie message event handler uses for tab navigation -->
+            <app-tenant-user></app-tenant-user>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+    <!-- end nav-tabs -->
+  </div>
+  <!-- end col-6 -->
+
+</div>
+<!-- end row -->

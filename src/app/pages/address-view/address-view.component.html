@@ -1,0 +1,151 @@
+<legend i18n="Address Info header|Address Info@@addressInfo" class="m-b-15">Address Info</legend>
+
+<form id="tenantAddressForm" name="tenantAddressForm" method="post" action="addTenantAddress">
+	<div class="form-group form-group-custom1">
+
+		<div class="formBodyCustom1">
+			<div class="form-group m-form__group row">
+				<div class="col-lg-2">
+					<label i18n="Address|Address@@address" >Address </label>
+				</div>
+				<div class="col-lg-4">
+					<input type="text" id="streetAddress" name="street" class="form-control m-input"
+					i18n-placeholder="Address placeholder|Enter address@@address.placeholder" placeholder="Enter address">
+
+				</div>
+				<div class="col-lg-2">
+					<label  i18n="City|City@@city" class="">City </label>
+				</div>
+				<div class="col-lg-4">
+					<input type="text" id="cityName" name="city" class="form-control m-input"
+					i18n-placeholder="City name placeholder|Enter city name@@city.placeholder"	placeholder="Enter city name">
+				</div>
+			</div>
+
+			<div class="form-group m-form__group row">
+				<div class="col-lg-2" style="height: 44px;">
+					<label i18n="Country|Country@@country" class="">Country</label>
+				</div>
+				<div class="col-lg-4">
+					<select id="tenantCountryId" name="tenantCountryId" onchange="onTenantCountryChange(this);"
+						class="form-control m-input">
+					</select>
+				</div>
+				<div class="col-lg-2">
+					<label i18n="State|State@@state" class="">State</label>
+				</div>
+				<div class="col-lg-4">
+					<select id="tenantStateId" name="tenantStateId" class="form-control m-input">
+					</select>
+					<span id="tenantStateIdValMsg" class="errorMsg"></span>
+				</div>
+			</div>
+			<div class="form-group m-form__group row">
+				<div class="col-lg-2">
+					<label i18n="Pincode|Pincode@@pincode" class="">Pincode</label>
+				</div>
+				<div class="col-lg-4">
+					<input type="text" id="zipcode" name="zipCode" class="form-control m-input"
+					i18n-placeholder="zipcode/pincode placeholder|Enter zipcode/pincode@@zipcode/pincode.placeholder"	placeholder="Enter zipcode/pincode">
+				</div>
+				<div class="col-lg-2">
+					<label i18n="Address Type|Address Type@@addressType" class="">Address Type</label>
+				</div>
+				<div class="col-lg-4">
+					<select id="accAddTypeId" name="accAddTypeId" class="form-control m-input">
+						<option i18n="option|Primary@@primary" value="1">Primary</option>
+					</select>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="form-group form-group-custom1">
+		<legend i18n="Contact Info header|Contact Info@@contactInfo" class="m-b-15">Contact Info</legend>
+		<div class="formBodyCustom1">
+			<div class="form-group m-form__group row">
+				<div class="col-lg-2">
+					<label i18n="Mobile No|Mobile No@@mobileNo" class="">Mobile No</label>
+				</div>
+				<div class="col-lg-4">
+					<input type="text" id="addressMobilePrimary" name="mobileNumberPrimary" class="form-control m-input"
+				i18n-placeholder="Mobile number placeholder|Enter mobile number@@mobileNumber.placeholder" placeholder="Enter mobile number">
+
+				</div>
+				<div class="col-lg-2">
+					<label i18n="Mobile alternate|Mobile (alternate)@@mobileAlternate" class="">Mobile (alternate)</label>
+				</div>
+				<div class="col-lg-4">
+					<input type="text" id="addressMobileSecondary" name="mobileNumberSecondary"
+						class="form-control m-input" i18n-placeholder="Mobile number placeholder|Enter mobile number@@mobileNumber.placeholder" placeholder="Enter mobile number">
+
+				</div>
+			</div>
+			<div class="form-group m-form__group row">
+				<div class="col-lg-2">
+					<label i18n="Phone No|Phone No@@phoneNo" class="">Phone No</label>
+				</div>
+				<div class="col-lg-4">
+					<div>
+						<input type="text" id="addressPhonePrimary" name="phoneNumberPrimary"
+							class="form-control m-input"  i18n-placeholder="Phone number placeholder|Enter your phone number@@phoneNumber.placeholder"placeholder="Enter your phone number">
+
+					</div>
+				</div>
+				<div class="col-lg-2">
+					<label i18n="Phone Alternate|Phone (alternate)@@phoneAlternate" class="">Phone (alternate)</label>
+				</div>
+				<div class="col-lg-4">
+					<div>
+						<input type="text" id="addressPhoneSecondary" name="phoneNumberSecondary"
+							class="form-control m-input" i18n-placeholder="Phone number placeholder|Enter your phone number@@phoneNumber.placeholder" placeholder="Enter your phone number">
+
+					</div>
+
+				</div>
+			</div>
+			<div class="form-group m-form__group row">
+				<div class="col-lg-2">
+					<label i18n="Skype ID|Skype ID@@skypeID" class="">Skype ID</label>
+				</div>
+				<div class="col-lg-4">
+					<div>
+						<input type="text" id="addressSkypeID" name="skypeId" class="form-control m-input"
+							i18n-placeholder="SkypeID placeholder|Enter your SkypeId@@skypeId.placeholder" placeholder="Enter your SkypeId">
+					</div>
+				</div>
+				<div class="col-lg-2">
+					<label i18n="Email ID|Email ID@@emailId" class="">Email ID</label>
+				</div>
+				<div class="col-lg-4">
+					<div>
+						<input type="email" name="emaild" id="addressEmailId" class="form-control m-input"
+						i18n-placeholder="EmailId placeholder|Enter your EmailId@@emailId.placeholder"	placeholder="Enter your EmailId">
+
+					</div>
+				</div>
+			</div>
+			<div class="form-group m-form__group row">
+				<div class="col-lg-2">
+					<label i18n="Fax No|Fax No@@faxNo" class="">Fax No</label>
+				</div>
+				<div class="col-lg-4">
+					<div class="m-input-icon m-input-icon--right">
+						<input type="text" id="addressFax" name="faxNumber" class="form-control m-input"
+						i18n-placeholder="Fax number placeholder|Enter fax number@@faxNumber.placeholder" placeholder="Enter fax number">
+
+					</div>
+				</div>
+				<div class="col-lg-2">
+					&nbsp;
+				</div>
+				<div class="col-lg-4">
+					<button i18n="Cancel button|Cancel@@cancel" type="button" id="btnCancelAddress" class="btn btn-secondary cancelActionButton">Cancel</button> &nbsp;
+					<button i18n="Reset button|Reset@@reset" type="button" id="btnResetAddress" class="btn btn-secondary resetActionButton">Reset</button> &nbsp;
+					<button i18n="Save button|Save@@save" type="button" id="btnAddTenAddress" class="btn btn-primary saveActionButton">Save</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+</form>

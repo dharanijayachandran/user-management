@@ -1,0 +1,221 @@
+<script>
+  $(function () {
+    $('.list-group.checked-list-box .list-group-item').each(function () {
+
+      // Settings
+      var $widget = $(this),
+        $checkbox = $('<input type="checkbox" class="hidden" />'),
+        color = ($widget.data('color') ? $widget.data('color') : "primary"),
+        style = ($widget.data('style') == "button" ? "btn-" : "list-group-item-"),
+        settings = {
+          on: {
+            icon: 'glyphicon glyphicon-check'
+          },
+          off: {
+            icon: 'glyphicon glyphicon-unchecked'
+          }
+        };
+
+      $widget.css('cursor', 'pointer')
+      $widget.append($checkbox);
+
+      // Event Handlers
+      $widget.on('click', function () {
+        $checkbox.prop('checked', !$checkbox.is(':checked'));
+        $checkbox.triggerHandler('change');
+        updateDisplay();
+      });
+      $checkbox.on('change', function () {
+        updateDisplay();
+      });
+
+
+      // Actions
+      function updateDisplay() {
+        var isChecked = $checkbox.is(':checked');
+
+        // Set the button's state
+        $widget.data('state', (isChecked) ? "on" : "off");
+
+        // Set the button's icon
+        $widget.find('.state-icon')
+          .removeClass()
+          .addClass('state-icon ' + settings[$widget.data('state')].icon);
+
+        // Update the button's color
+        if (isChecked) {
+          $widget.addClass(style + color + ' active');
+        } else {
+          $widget.removeClass(style + color + ' active');
+        }
+      }
+
+      // Initialization
+      function init() {
+
+        if ($widget.data('checked') == true) {
+          $checkbox.prop('checked', !$checkbox.is(':checked'));
+        }
+
+        updateDisplay();
+
+        // Inject the icon if applicable
+        if ($widget.find('.state-icon').length == 0) {
+          $widget.prepend('<span class="state-icon ' + settings[$widget.data('state')].icon + '"></span>');
+        }
+      }
+      init();
+    });
+
+    $('#get-checked-data').on('click', function (event) {
+      event.preventDefault();
+      var checkedItems = {}, counter = 0;
+      $("#check-list-box li.active").each(function (idx, li) {
+        checkedItems[counter] = $(li).text();
+        counter++;
+      });
+      $('#display-json').html(JSON.stringify(checkedItems, null, '\t'));
+    });
+  });
+</script>
+<form [formGroup]="tenentUserForm">
+  <div class="p-10 mt-n2">
+    <label i18n="Tab|Tenent Name@@tenantName" class="">Tenant Name</label>
+    <div class="col-md-4 p-0">
+      <input type="text" formControlName="tenentName" class="form-control m-input" readonly>
+    </div>
+  </div>
+</form>
+<!-- Teant user list view starts here -->
+<div class="container mat-elevation-z8 panel panel-inverse mb-0" style="position: relative" *ngIf="userListView">
+  <app-panel-user i18n-name="Panel header|List of Users@@listOfUsers" name="List of Users" #panelHeader
+    (refreshTableList)="refreshTableListFunction();panelHeader.setTableDasourceAsDefault(this.dataSource)" (scrollBarDirective)="onPaginateViewScrollToTop()">
+
+    <!-- Back button -->
+    <a backButton href="javascript:;" i18n-matTooltip="Back button|Back to Tenant@@backToTenant"
+    matTooltip="Back to Manage Tenant" class="btn btn-xs btn-icon btn-circle btn-default backButton"
+    (click)="backToTenant()">
+    <i class="fa fa-angle-left" aria-hidden="true"></i>
+   </a>
+
+    <!-- Input field for search -->
+    <input searchfield style="display: none;" id="filter" class="form-control m-input ml-2"
+      (keyup)="panelHeader.applyFilter($event.target.value, dataSource)"
+      i18n-matInputPlaceholder="Search|Search placeholder@@search" matInput placeholder="Search.." />
+
+    <!-- Search button -->
+    <a searchButton href="javascript:;" i18n-matTooltip="Search button|Click to Search tooltip@@clickToSearch"
+      matTooltip="Click to Search" class="btn btn-xs btn-icon btn-circle btn-default">
+      <i class="fa fa-search" (click)="panelHeader.searchButton(this.dataSource)"></i>
+    </a>
+     <!-- Add New button -->
+     <a *ngIf='!isSearchUserEnabled' addNewButton i18n-matTooltip="AddNew button tooltip|Click to Add New@@addNew" (click)="addUser()"
+     matTooltip="Click to Add New" class="btn btn-xs btn-icon btn-circle btn-warning">
+     <i class="fa fa-plus"></i>
+   </a>
+    <!-- Search user and add new -->
+  
+    <span *ngIf="isSearchUserEnabled" addNewButton class="ml-2 d-inline-block">
+     <app-export-add-search-user (exportedTo)="tenantOrUser('tenantForm')"></app-export-add-search-user>
+   </span>
+    <div id="userList" class="position-relative">
+      <div class="ps position-relative"  [ngClass]="{'firstLeveltabTable':this.dataSource.filteredData.length!=0}" appScrollbarDirective *ngIf="dataSource && dataSource.data.length">
+        <ng-container *ngTemplateOutlet="matTable"></ng-container>
+      </div>
+
+      <div class="table-responsive" *ngIf="!dataSource || !dataSource.data.length">
+        <ng-container *ngTemplateOutlet="matTable"></ng-container>
+      </div>
+      <!-- Loader image  -->
+      <div *ngIf="showLoaderImage" class="col-lg-12" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+        align="center">
+        <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+      </div>
+      <h3 i18n="No records found text|No records found@@noRecordsFound" *ngIf="((dataSource && !dataSource.data.length) || dataSource.filteredData.length==0 ) && !showLoaderImage"
+        class="text-center noRecordsFound">
+        No records found!
+      </h3>
+      <app-mat-table-paginator [dataSource]="this.dataSource" #myPaginatorChildComponent (paginator)="matTablePaginator($event)"
+            (scrollBarDirective)="onPaginateViewScrollToTop()"></app-mat-table-paginator>
+      <!-- <mat-paginator [hidden]="dataSource && !dataSource.data.length" #myPaginator
+        [length]="dataSource && dataSource.data.length" [pageSize]="pageSize" [pageSizeOptions]="[100, 500, 1000, 5000]"
+        showFirstLastButtons>
+      </mat-paginator> -->
+    </div>
+
+    <ng-template #matTable>
+      <table mat-table [dataSource]="dataSource" class="table table-striped table-bordered" matSort>
+        <ng-container matColumnDef="id">
+          <th i18n="Table id|Sno@@sNo" mat-header-cell *matHeaderCellDef>S.No.</th>
+          <td mat-cell *matCellDef="let element; let i = index;">
+            {{ (i+1) + (myPaginator.pageIndex * myPaginator.pageSize) }}</td>
+        </ng-container>
+        <ng-container matColumnDef="firstName">
+          <th i18n="Table first name|Name@@name" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+          <td mat-cell *matCellDef="let element">
+            {{element.firstName}}&nbsp;{{element.middleName}}&nbsp;{{element.lastName}} </td>
+        </ng-container>
+        <ng-container matColumnDef="signonId">
+          <th i18n="Table|User Name/SignonId@@userName/SignonId" mat-header-cell *matHeaderCellDef mat-sort-header>User Name / SignOn Id</th>
+          <td mat-cell *matCellDef="let element"> {{element.signonId}} </td>
+        </ng-container>
+        <ng-container matColumnDef="emailId">
+          <th i18n="Table emailId|Email Id@@emailId" mat-header-cell *matHeaderCellDef mat-sort-header> Email Id </th>
+          <td mat-cell *matCellDef="let element"> {{element.emailId}} </td>
+        </ng-container>
+        <ng-container matColumnDef="mobileNumberPrimary">
+          <th i18n="Table mobileNumberPrimary|Mobile No@@mobileNumber" mat-header-cell *matHeaderCellDef
+            mat-sort-header> Mobile No</th>
+          <td mat-cell *matCellDef="let element"> {{element.mobileNumberPrimary}} </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th i18n="Table status|Status@@status" mat-header-cell *matHeaderCellDef> Status </th>
+
+          <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+        </ng-container>
+        <ng-container matColumnDef="edit">
+          <th i18n="Table action|Action@@action" mat-header-cell *matHeaderCellDef> Action </th>
+          <td mat-cell *matCellDef="let element">
+
+            <a class="" [routerLink]="['../tenant/userViewMode']" (click)="clickToView(element)">
+              <i class="fas fa-md fa-fw m-r-10 fa-eye" alt="view"
+                i18n-matTooltip="View button|Click to View tooltip@@clickToView" matTooltip="Click to View"></i>
+            </a>
+
+            <a [routerLink]="['../tenant/tenantUserForm']" class="" (click)="updateTenantUserFormView(element)">
+              <i class="fas fa-md fa-fw m-r-10 fa-edit" alt="edit"
+                i18n-matTooltip="Edit button|Click to Edit tooltip@@clickToEdit" matTooltip="Click to Edit"></i>
+            </a>
+             <span *ngIf="element.isAdmin">
+              <a style="vertical-align: middle;" href="javascript:void(0)" disabled="true">
+              <i class="fas fa-list faList disabledIconClass"></i>
+            </a>
+             </span>
+             <span *ngIf="!element.isAdmin">
+              <a [routerLink]="['../tenant/tenantUserRole']" class="" (click)="viewUserRoleListByUserId(element)"
+              style="vertical-align: middle;">
+              <i class="fas fa-list faList"
+                i18n-matTooltip="Assign roles button|Click to Assign Roles tooltip@@clickToAssignRoles"
+                matTooltip="Click to Assign Roles"></i>
+            </a>
+             </span>
+            <a class="" (click)="deleteUser(element)">
+              <i class="fas fa-md fa-fw m-r-10 fa-trash-alt" alt="delete"
+                i18n-matTooltip="Delete button|Click to Delete tooltip@@clickToDelete" matTooltip="Click to Delete"></i>
+            </a>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+    </ng-template>
+  </app-panel-user>
+ 
+
+</div>
+<!-- Teant user list view ends here -->
+
+
+<!-- Global modal notification component selector  for deletion and after deletetion success, success with failed-->
+<app-modal-notification (modelNotificationDanger)="confirmDelete();"
+  (modelNotificationSuccess)="refreshTableListFunction()"></app-modal-notification>

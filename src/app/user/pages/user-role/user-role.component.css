@@ -1,0 +1,6 @@
+.dual-list .listbox:first-child{
+    margin-right: 25px!important;
+}
+.dual-list .listbox:nth-child(2){
+    margin-left: 25px;
+}

@@ -1,0 +1,36 @@
+<div [formGroup]="roleForm" class="formBodyCustom1">
+  <div class="row">
+    <div class="col-md-6 col-lg-6">
+      <label i18n="Name|Name@@name*" class="">Name<span class="text-danger">*</span></label>
+      <div class="form-group">
+        <div [ngClass]="{'has-error': ((roleForm.get('name').touched || roleForm.get('name').dirty) &&
+            roleForm.get('name').errors)}">
+          <input (keyup)="onKey($event)" type="text" id="roleFullName" formControlName="name" class="form-control m-input" i18n-placeholder="Enter Name|Enter Name placeholder@@name.placeholder" placeholder="Enter Name">
+          <span class="help-block" *ngIf="((roleForm.get('name').touched ||
+              roleForm.get('name').dirty) &&
+              roleForm.get('name').errors)">
+            <span i18n="Message|Please enter Name@@name.message1" *ngIf="roleForm.get('name').errors.required">
+              Please enter Name
+            </span>
+            <span i18n="Message|Please enter valid Characters@@name.message2" *ngIf="roleForm.get('name').errors.pattern">
+              Please enter valid Characters
+            </span>
+          </span>
+        </div>
+        <span id="tenantFullNameValMsg" class="errorMsg"></span>
+      </div>
+    </div>
+    <div class=" col-md-6 col-lg-6">
+      <label i18n="Description|Description@@description" class="">Description</label>
+      <div>
+        <textarea style="height: 125px!important;" rows="4" type="text" formControlName="description" class="form-control m-input"
+        i18n-placeholder="Description placeholder|Enter Description@@description.placeholder"  placeholder="Enter Description"></textarea>
+      </div>
+      <span id="roleOwnerNameValMsg" class="errorMsg"></span>
+    </div>
+    <!-- <div class="col-md-6 col-lg-6">
+
+      <span id="roleMaxAccountValMsg" class="errorMsg"></span>
+    </div> -->
+  </div>
+</div>

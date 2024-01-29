@@ -1,0 +1,49 @@
+<!--  Role forms view starts here -->
+<div class="row">
+    <div class="col-md-12">
+      <h1 i18n="Page header|Role@@role" class="page-header">
+        {{addEditText}} Role
+      </h1>
+    </div>
+  </div>
+  <div class="row margin_0px rowBox margin_top_5px">
+    <div class="col-md-12 padding_0px">
+      <div class="padding_Form">
+        <form [formGroup]="RoleForm" novalidate (ngSubmit)="previewRole()">
+          <legend i18n="Role Details header|Role Details@@roleDetails" class="m-b-15"> Role Details</legend>
+          <!-- <legend i18n="@@" class="m-b-15" *ngIf="addRoleHeader"> Add Role</legend>
+                <legend i18n="@@" class="m-b-15" *ngIf="updateRoleHeader"> Update Role</legend> -->
+          <div class="formBodyCustom1" id="">
+            <div class="form-group form-group-custom1">
+              <app-role-form [group]="RoleForm.controls.role"></app-role-form>
+            </div>
+  
+            <div class="path finalLine"></div>
+            <div class="row" style="    text-align: right;padding: 23px 0;">
+              <div class="col-md-12">
+                <a (click)="cancelRoleForm($event)">
+                  <button type="button" class="btn btn-default text-center cancelActionButton" i18n="Cancel button|Cancel@@cancel"> Cancel
+                  </button>
+                </a>
+                &nbsp;
+                <button type="button" class="btn btn-secondary text-center resetActionButton"
+                  [disabled]="!RoleForm.dirty && RoleForm.pristine" (click)="resetRoleForm()" i18n="Reset button|Reset@@reset"> Reset
+                </button>
+                &nbsp;
+                <span i18n-matTooltip="Tooltip validation|Fill the mandatory fields@@fillTheMandatoryFields" matTooltip="Fill the mandatory fields" [matTooltipDisabled]="RoleForm.valid">
+                  <a>
+                      <button  class="btn btn-primary text-center reviewAndSaveActionButton" type="submit"
+                      [disabled]="!RoleForm.valid" i18n="Review&Save button|Review&Save@@review&Save">
+                      Review & Save</button>
+                  </a>
+                </span>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+  <!--  Role forms view ends here -->
+  <!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification (modelNotificationWarning)="formResetConfirm()"></app-modal-notification>

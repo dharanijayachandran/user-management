@@ -1,0 +1,137 @@
+<!-- Tenant list view starts here -->
+<div id="tenList">
+  <div class="container mat-elevation-z8 panel panel-inverse mb-0" style="position: relative">
+    <app-panel-user i18n-name="Panel header|List of Tenants@@listOfTenants" name="List of Tenants" #panelHeader
+      (refreshTableList)="refreshTableListFunction();panelHeader.setTableDasourceAsDefault(this.dataSource)" (scrollBarDirective)="onPaginateViewScrollToTop()">
+
+      <!-- Download files as Excel, PDF, CSV -->
+      <span downloadButton class="ml-2 d-inline-block" *ngIf="dataSource && dataSource.data.length">
+        <app-export-files-to (exportedTo)="downloadFile($event)"></app-export-files-to>
+      </span>
+
+      <!-- Input field for search -->
+      <input searchfield style="display: none;" id="filter" class="form-control m-input ml-2"
+        (keyup)="panelHeader.applyFilter($event.target.value, dataSource)"
+        i18n-placeholder="Search|Search placeholder@@search" matInput placeholder="Search.." />
+
+      <!-- Search button -->
+      <a searchButton href="javascript:;" i18n-matTooltip="Search button|Click to Search@@ClickToSearch"
+        matTooltip="Click to Search" class="btn btn-xs btn-icon btn-circle btn-default"
+        (click)="panelHeader.searchButton(this.dataSource)">
+        <i class="fa fa-search"></i>
+      </a>
+      <!-- Add New button -->
+      <a  addNewButton i18n-matTooltip="AddNew button tooltip|Click to Add New@@addNew" (click)="addTenant()"
+        matTooltip="Click to Add New" class="btn btn-xs btn-icon btn-circle btn-warning">
+        <i class="fa fa-plus"></i>
+      </a>
+       <!-- Search user and add new -->
+     
+       <!-- <span *ngIf="isSearchUserEnabled" addNewButton class="ml-2 d-inline-block">
+        <app-export-add-search-user (exportedTo)="tenantOrUser('tenantForm')"></app-export-add-search-user>
+      </span> -->
+      <div class="position-relative">
+        <div class="ps position-relative" id="matTable1"
+          [ngClass]="{'firstLeveltabTable':this.dataSource.filteredData.length!=0}" appScrollbarDirective
+          *ngIf="dataSource && dataSource.data.length">
+          <ng-container *ngTemplateOutlet="matTable"></ng-container>
+        </div>
+
+        <div class="table-responsive" *ngIf="!dataSource || !dataSource.data.length ">
+          <ng-container *ngTemplateOutlet="matTable"></ng-container>
+        </div>
+        <!-- Loader image  -->
+        <div *ngIf="showLoaderImage" class="col-lg-12" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+          align="center">
+          <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+        </div>
+        <h3 i18n="No records found text|No records found@@noRecordsFound"
+          *ngIf="((dataSource && !dataSource.data.length) || dataSource.filteredData.length==0 ) && !showLoaderImage"
+          class="text-center noRecordsFound">
+          No records found!
+        </h3>
+        <ng-conainer>
+          <app-mat-table-paginator [dataSource]="dataSource" #myPaginatorChildComponent (paginator)="matTablePaginator($event)"
+            (scrollBarDirective)="onPaginateViewScrollToTop()"></app-mat-table-paginator>
+        </ng-conainer>
+      </div>
+
+      <ng-template #matTable>
+        <table mat-table [dataSource]="dataSource" class="table table-striped table-bordered" matSort>
+          <ng-container matColumnDef="id">
+            <th i18n="Table id|Sno@@sNo" mat-header-cell *matHeaderCellDef>S.No.</th>
+            <td mat-cell *matCellDef="let element; let i = index;">
+              {{ (i+1) + (myPaginator.pageIndex * myPaginator.pageSize) }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="name">
+            <th i18n="Table|Name@@name" mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+            <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+          </ng-container>
+          <ng-container matColumnDef="emaild">
+            <th i18n="Table|Email Id@@emailId" mat-header-cell *matHeaderCellDef mat-sort-header> Email Id </th>
+            <td mat-cell *matCellDef="let element"> {{element.emaild}} </td>
+          </ng-container>
+          <ng-container matColumnDef="mobileNumberPrimary">
+            <th i18n="Table|Mobile No@@mobileNumber" mat-header-cell *matHeaderCellDef mat-sort-header> Mobile No
+            </th>
+            <td mat-cell *matCellDef="let element"> {{element.mobileNumberPrimary}} </td>
+          </ng-container>
+          <ng-container matColumnDef="status">
+            <th i18n="Table|Status@@status" mat-header-cell *matHeaderCellDef mat-sort-header> Status </th>
+            <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+          </ng-container>
+          <ng-container matColumnDef="edit">
+            <th i18n="Table|Action@@action" mat-header-cell *matHeaderCellDef class="action_width"> Action </th>
+            <td mat-cell *matCellDef="let element">
+              <a class="" [routerLink]="['../tenant/view', element.id]" (click)="clickToView(element)">
+                <i class="fas fa-md fa-fw m-r-10 fa-eye" alt="view"
+                  i18n-matTooltip="View button|Click to View tooltip@@clickToView" matTooltip="Click to View"></i>
+              </a>
+              <a class="" [routerLink]="['../tenant/addTenant']" (click)="UpdateTenant(element)">
+                <i class="fas fa-md fa-fw m-r-10 fa-edit" alt="edit"
+                  i18n-matTooltip="Edit button|Click to Edit tooltip@@clickToEdit" matTooltip="Click to Edit"></i>
+              </a>
+
+              <a class="" (click)="viewTenantMenuListByTenId(element);">
+                <i class="fas fa-md fa-fw m-r-10 fa-share-square" alt="Assign menus"
+                  i18n-matTooltip="Assign menus button|Click to Assign Menus@@clickToAssignMenus"
+                  matTooltip="Click to Assign Menus"></i>
+              </a>
+              <a class="" (click)="viewTenantRoleListByTenId(element.id,element.name);">
+                <i class="fas fa-md fa-fw m-r-10 fa-user" alt="Manage Role"
+                  i18n-matTooltip="Manage Roles button|Click to Manage Roles@@clickToManageRoles"
+                  matTooltip="Click to Manage Roles"></i>
+              </a>
+              <a class="" (click)="viewTenantUserListByTenId(element.id,element.name);">
+                <i class="fas fa-md fa-fw m-r-10 fa fa-users pt-1" alt="Manage user"
+                  i18n-matTooltip="Manage Users button|Click to Manage Users@@clickToManageUsers"
+                  matTooltip="Click to Manage Users"></i>
+              </a>
+
+              <a [routerLink]="['../tenant/tenantAssignApplications']" class="" (click)="viewUserRoleListByUserId(element.id,element.name)">
+                <i class="fas fa-list faList"
+                i18n-matTooltip="Assign Applications button|Click to Assign Applications tooltip@@clickToAssignApplications"
+                matTooltip="Click to Assign Applications"></i>
+              </a>
+            
+              <a class="" (click)="deleteTenant(element.id);">
+                <i class="fas fa-md fa-fw m-r-10 fa-trash-alt" alt="delete"
+                  i18n-matTooltip="Delete button|Click to Delete tooltip@@clickToDelete"
+                  matTooltip="Click to Delete"></i>
+              </a>
+            </td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </ng-template>
+    </app-panel-user>
+
+
+  </div>
+</div>
+
+<!-- Global modal notification component selector  for deletion and after deletetion success, success with failed-->
+<app-modal-notification (modelNotificationDanger)="confirmDelete();"
+  (modelNotificationSuccess)="refreshTableListFunction()"></app-modal-notification>

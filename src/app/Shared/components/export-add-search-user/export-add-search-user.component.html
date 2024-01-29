@@ -1,0 +1,22 @@
+<ul class="navbar-nav ml-auto" ngbDropdown>
+    <li class="nav-item dropdown exportFileTo">
+        <a id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+            href="javascript:;" i18n-matTooltip="CSV Tooltip|Click to Add or Add AD user@@clickToAddOrAddADuser"
+            matTooltip="Click to Add or Add AD user" class="btn btn-xs btn-icon btn-circle btn-warning dropdown-toggle" ngbDropdownToggle>
+            <i class="fa fa-plus" aria-hidden="true"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right animate slideIn" aria-labelledby="navbarDropdown" ngbDropdownMenu>
+            <a class="dropdown-item" href="javascript:;" (click)="addTenant()">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Add New
+            </a>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="javascript:;" (click)="searchUser()">
+                <i class="fa fa-search" aria-hidden="true"></i>
+                Add User from AD
+            </a>
+        </div>
+    </li>
+</ul>
+<!-- Global modal notification component selector  for deletion and after deletetion success, success with failed-->
+<app-modal-notification></app-modal-notification>

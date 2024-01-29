@@ -1,0 +1,64 @@
+<!-- Roles assign to the User starts here -->
+
+<div class="row">
+  <div class="col-md-12">
+    <h1 i18n="Page header|Assign Roles@@assignRoles" class="page-header">
+      Assign Roles
+    </h1>
+  </div>
+</div>
+<div class="panel panel-inverse" style="position: relative">
+  <app-panel-user i18n-name="Panel header|Assign Roles@@assignRoles" name=" Assign Roles: {{roleDetail.firstName}}"
+    (refreshTableList)="refreshTableListFunction()">
+    <div class="row margin_0px rowBox">
+      <div class="col-md-12 padding_0px margin_top_5px">
+        <div class="padding_Form">
+          <div class="form-group-custom1">
+            <div class="row form-group">
+              <div class="col-md-12 col-lg-12">
+                <dual-list class="dualBoxList" [sort]="keepSorted" [source]="source" [key]="key" [display]="display"
+                  [filter]="filter" [(destination)]="confirmed" height="265px" [format]="format" [disabled]="disabled" (destinationChange)="getRoleMovedByUser($event)">
+                </dual-list>
+                <div class="tab-content">
+                </div>
+              </div>
+            </div>
+            <div class="path finalLine"></div>
+            <!-- Save button -->
+            <div class="row" style="text-align: right;padding: 23px 0;">
+              <div class="col-md-12">
+                <a>
+                  <button type="button" class="btn btn-default text-center cancelActionButton"
+                    i18n="Cancel button|Cancel@@cancel" (click)="CancelRoleAssignToUser()"> Cancel
+                  </button>
+                </a>
+                &nbsp;
+                <button type="button" class="btn btn-secondary text-center resetActionButton" (click)="resetRoleForm()"
+                  i18n="Reset button|Reset@@reset" [disabled]="!roleMovedByUser">
+                  Reset
+                </button>
+                &nbsp;
+                <span>
+                  <button i18n="Save button|Save@@save" class="btn btn-primary text-center saveActionButton"
+                    type="submit" (click)="SaveRoleAssignToUser()">
+                    Save</button>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </app-panel-user>
+</div>
+
+<!-- Roles assign to the User ends here -->
+
+<!-- Loader image  -->
+<div *ngIf="showLoaderImage" class="col-lg-12 loaderImageStyle" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+  align="center">
+  <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+</div>
+<!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification (modelNotificationSuccess)="redirectTo()" (modelNotificationWarning)="alertRedirection()">
+</app-modal-notification>

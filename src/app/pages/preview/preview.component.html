@@ -1,0 +1,150 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1 i18n="Page header|View@@viewheader" class="page-header">
+      View {{pageName}}
+    </h1>
+  </div>
+</div>
+
+<div class="row margin_0px rowBox margin_top_5px">
+  <div class="col-md-12 padding_0px">
+    <div class="padding_Form">
+      <!-- Tenant form read mode view starts here  -->
+      <div class="formReadMode">
+        <div class="form-group-custom1">
+          <legend i18n="Details header|Details@@details" class="m-b-15">{{pageName}} Details</legend>
+          <div class="form-row">
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Name|Name@@name" class="">Name</label>
+              <p>
+                {{userDetail.name}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Maximum Users|Maximum Users@@maxUsers" class="">Maximum Users</label>
+              <p>
+                {{userDetail.numberOfUsers}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Status|Status@@status" class="">Status</label>
+              <p>
+                {{userDetail.status}}
+              </p>
+              <!-- <ng-template #activeBlock>
+                <p>
+                  {{userDetail.status}}
+                </p>
+              </ng-template> -->
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Description|Description@@description" class="">Description</label>
+              <p>
+                {{userDetail.description | hyphen}}
+              </p>
+            </div>
+          </div>
+          <div class="path"></div>
+          <legend i18n="Contact Information header|Contact Information@@contactInformation" class="m-b-15">Contact Information</legend>
+          <div class="form-row">
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="E-mailID|E-mail ID@@e-mailID" class="">E-mail ID</label>
+              <p>
+                {{userDetail.emaild | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="website|Website@@website" class="">Website</label>
+              <p>
+                {{userDetail.webSite | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Fax|Fax@@fax" class="">Fax</label>
+              <p>
+                {{userDetail.faxNumber | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Skype ID|Skype ID@@skypeID" class="">Skype ID</label>
+              <p>
+                {{userDetail.skypeId | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Mobile Number|Mobile Number@@mobileNumber" class="">Mobile Number</label>
+              <p>
+                {{userDetail.mobileNumberPrimary | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Mobile Number Alternate|Mobile Number (Alternate)@@mobileNumberAlternate" class="">Mobile Number (Alternate)</label>
+              <p>
+                {{userDetail.mobileNumberSecondary | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Phone Number|Phone Number@@phoneNumber" class="">Phone Number</label>
+              <p>
+                {{userDetail.phoneNumberPrimary | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Phone Number Alternate|Phone Number (Alternate)@@honeNumberAlternate" class="">Phone Number (Alternate)</label>
+              <p>
+                {{userDetail.phoneNumberSecondary | hyphen}}
+              </p>
+            </div>
+          </div>
+          <div class="path"></div>
+          <legend class="m-b-15 " i18n="Address Details header|Address Details@@addressDetails">Address Details</legend>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label i18n="Address|Address@@address" class="">Address</label>
+              <p class="mb-3">
+                {{address?.addressLine1 | hyphen}}
+              </p>
+              <p>
+                {{address?.addressLine2}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="ZipCode|Zip Code@@zipCode" class="">Zip Code</label>
+              <p>
+                {{address?.zipCode | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="City/Town|City/Town@@city/Town" class="">City/Town</label>
+              <p>
+                {{address?.city | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="Country|Country@@country" class="">Country</label>
+              <p>
+                {{address?.country | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="State|State@@state" class="">State</label>
+              <p>
+                {{address?.state | hyphen}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-default text-center backActionButton" (click)="backButton()" i18n="Back button|Back@@back"> Back
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- read mode view ends here  -->
+  </div>
+</div>
+
+<span class="hidden" #redirectTo>{{pageName | lowercase}}</span>

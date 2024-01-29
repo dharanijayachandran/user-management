@@ -1,0 +1,43 @@
+
+  <!-- begin page-header -->
+  <h1 i18n="Page header|Manage Role@@manageRole" class="page-header">Manage Role</h1>
+  <div class="header_Underline"></div>
+  <!-- end page-header -->
+
+<!-- begin row -->
+<div class="row">
+  <!-- begin col-6 -->
+  <div class="col-lg-12">
+    <!-- begin nav-tabs -->
+    <ngb-tabset type="pills" #roleManage (tabChange)="beforeChange($event)">
+      <ngb-tab id="mngRoll">
+        <ng-template ngbTabTitle>
+          <span i18n="Role tab|Role@@role" class="d-sm-none">Role</span>
+          <span i18n="Role tab|Role@@role" class="d-sm-block d-none">Role</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="roleView" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <app-role-list (messageEvent)="receiveMessage($event)"></app-role-list>
+            <!-- <app-role-view (messageEvent)="receiveMessage($event)"></app-role-view> -->
+          </div>
+        </ng-template>
+      </ngb-tab>
+
+      <ngb-tab id="mngRollMenu">
+        <ng-template ngbTabTitle>
+          <span i18n="Menu tab|Menu@@menu" class="d-sm-none">Menu</span>
+          <span i18n="Menu tab|Menu@@menu" class="d-sm-block d-none">Menu</span>
+        </ng-template>
+        <ng-template ngbTabContent>
+          <div id="menuView" class="rowBox p-10 custom-rounded-bottom rowBoxFirstLevelHeight">
+            <app-role-menu [roleIdValueChild]="gettingRoleDetail"></app-role-menu>
+          </div>
+        </ng-template>
+      </ngb-tab>
+    </ngb-tabset>
+    <!-- end nav-tabs -->
+  </div>
+  <!-- end col-6 -->
+
+</div>
+<!-- end row -->

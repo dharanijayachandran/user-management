@@ -1,0 +1,160 @@
+ 
+
+<!-- user click to view starts here------------ -->
+<div class="row">
+  <div class="col-md-12">
+    <h1 i18n="Page header|My Profile@@myProfile" class="page-header">
+      My Profile
+    </h1>
+  </div>
+</div>
+
+<div class="row margin_0px rowBox margin_top_5px">
+  <div class="col-md-12 padding_0px">
+    <div class="padding_Form">
+      <!-- User form read mode view starts here  -->
+      <div class="formReadMode">
+        <div class="form-group-custom1">
+          <legend i18n="Personal Details header|Personal Details@@personalDetails" class="m-b-15">Personal Details</legend>
+          <div class="form-row">
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="Salutation|Salutation@@salutation" class="">Salutation</label>
+              <p>
+                  {{userDetail.salutation | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="First Name|First Name@@firstName" class="">First Name</label>
+              <p>
+                  {{userDetail.firstName | hyphen}}
+              </p>
+      </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="Middle Name|Middle Name@@middleName" class="">Middle Name</label>
+              <p>
+                {{userDetail.middleName | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="Last Name|Last Name@@lastName" class="">Last Name</label>
+              <p>
+                {{userDetail.lastName | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Gender|Gender@@gender" class="">Gender</label>
+              <p>
+                {{userDetail.gender | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="DOB|DOB@@dOB" class="">DOB</label>
+              <p>
+                {{userDetail.dateOfBirth | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="Status|Status@@status" class="">Status</label>
+              <p>
+                {{userDetail.status | hyphen}}
+              </p>
+            </div> 
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="IsAdmin|Admin User@@isAdmin" class="">Admin User</label>
+              <p *ngIf="userDetail.isAdmin == true else noBlock">
+                Yes
+              </p>
+              <ng-template #noBlock>
+                <p>
+                  No
+                </p>
+              </ng-template>
+            </div>
+          </div>
+          <div class="path"></div>
+          <legend i18n="Contact Information header|Contact Information@@contactInformation" class="m-b-15">Contact Information</legend>
+          <div class="form-row">
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="E-mailID|E-mail ID@@e-mailID" class="">E-mail ID</label>
+              <p>
+                {{userDetail.emailId | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Skype ID|Skype ID@@skypeID" class="">Skype ID</label>
+              <p>
+                {{userDetail.skypeId | hyphen}}
+              </p>
+            </div>
+
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Mobile Number|Mobile Number@@mobileNumber" class="">Mobile Number</label>
+              <p>
+                {{userDetail.mobileNumberPrimary | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Mobile Number Alternate|Mobile Number (Alternate)@@mobileNumberAlternate" class="">Mobile Number (Alternate)</label>
+              <p>
+                {{userDetail.mobileNumberSecondary | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Phone Number|Phone Number@@phoneNumber" class="">Phone Number</label>
+              <p>
+                {{userDetail.phoneNumberPrimary | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-6">
+              <label i18n="Phone Number Alternate|Phone Number (Alternate)@@phoneNumberAlternate" class="">Phone Number (Alternate)</label>
+              <p>
+                {{userDetail.phoneNumberSecondary | hyphen}}
+              </p>
+            </div>
+          </div>
+          <div class="path"></div>
+          <legend i18n="Address Details header|Address Details@@addressDetails" class="m-b-15 ">Address Details</legend>
+          <div class="form-row">
+            <div class="form-group col-md-12">
+              <label i18n="Address|Address@@address" class="">Address</label>
+              <p class="mb-3">
+                {{userDetail.street | hyphen}}
+              </p>
+              <p>
+                {{userDetail.userAddress2}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="ZipCode|Zip Code@@zipCode" class="">Zip Code</label>
+              <p>
+                {{userDetail.zipcode | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="City/Town|City/Town@@city/Town" class="">City/Town</label>
+              <p>
+                {{userDetail.city | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="Country|Country@@country" class="">Country</label>
+              <p>
+                {{userDetail.country | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="State|State@@state" class="">State</label>
+              <p>
+                {{userDetail.state | hyphen}}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- read mode view ends here  -->
+  </div>
+</div>
+
+<!-- <span class="hidden" #redirectTo>{{user | lowercase}}</span> -->
+<!------------------User user click to view  ends here-->

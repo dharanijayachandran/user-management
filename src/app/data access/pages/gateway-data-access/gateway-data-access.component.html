@@ -1,0 +1,348 @@
+<!-- asset access  Form starts here -->
+<div class="row margin_0px rowBox">
+    <div class="col-md-12 padding_0px">
+        <div class="padding_Form">
+            <form [formGroup]="dataAccessForm" novalidate (ngSubmit)="saveDataAccess()">
+                <legend i18n="Header|Asset Access Information@@assetAccessInformation" class="m-b-15"> Gateway Access
+                    Information</legend>
+                <div class="formBodyCustom1" id="">
+                    <div class="m-form__group row margin_0px">
+                        <div class="col-md-4 p-0">
+                            <label i18n="Access Group|Access Group@@accessGroup*">Access Group<span
+                                    class="text-danger">*</span></label>
+                            <div class="form-group">
+                                <div [ngClass]="{'has-error': ((dataAccessForm.get('accessGroupId').touched ||
+                                dataAccessForm.get('accessGroupId').dirty) &&
+                                dataAccessForm.get('accessGroupId').errors)}">
+                                    <select (change)="onChangeAccessGroup($event)" formControlName="accessGroupId"
+                                        class="form-control m-input" required>
+                                        <option [ngValue]="null" i18n="Option|Select@@select">--Select--</option>
+                                        <option *ngFor="let accessGroup of accessGroups" [value]="accessGroup.id">
+                                            {{accessGroup.name}}</option>
+                                    </select>
+                                    <span class="help-block" *ngIf="((dataAccessForm.get('accessGroupId').touched ||
+                                      dataAccessForm.get('accessGroupId').dirty) &&
+                                      dataAccessForm.get('accessGroupId').errors)">
+                                        <span i18n="Message|Please select Access Group Name@@accessGroup.message"
+                                            class="help-block"
+                                            *ngIf="dataAccessForm.get('accessGroupId').errors.required">
+                                            Please select Access Group Name
+                                        </span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-8"></div>
+                    </div>
+                    <app-panel-user i18n-name="Panel header|List of Gateways@@listOfGateways"
+                        name="List of Gateways" #panelHeader
+                        (refreshTableList)="refreshTableListFunction();panelHeader.setTableDasourceAsDefault(this.dataSource)"
+                        (scrollBarDirective)="onPaginateViewScrollToTop()">
+                        <!-- Input field for search -->
+                        <input searchfield style="display: none;" id="filter" class="form-control m-input ml-2"
+                            (keyup)="panelHeader.applyFilter($event.target.value, dataSource)"
+                            i18n-placeholder="Search|Search placeholder@@search" matInput placeholder="Search.." />
+
+                        <!-- Search button -->
+                        <a searchButton href="javascript:;"
+                            i18n-matTooltip="Search button|Click to Search@@ClickToSearch" matTooltip="Click to Search"
+                            class="btn btn-xs btn-icon btn-circle btn-default"
+                            (click)="panelHeader.searchButton(this.dataSource)">
+                            <i class="fa fa-search"></i>
+                        </a>
+
+                        <div class="position-relative">
+                            <div class="ps position-relative"
+                                [ngClass]="{'secondLeveltabTable':this.dataSource.filteredData.length!=0}"
+                                appScrollbarDirective *ngIf="dataSource && dataSource.data.length">
+                                <ng-container *ngTemplateOutlet="matTable"></ng-container>
+                            </div>
+
+                            <div class="table-responsive" *ngIf="!dataSource || !dataSource.data.length">
+                                <ng-container *ngTemplateOutlet="matTable"></ng-container>
+                            </div>
+                            <h3 i18n="No records found text|No records found@@noRecordsFound"
+                                class="text-center noRecordsFound"
+                                *ngIf="(noRecordBlock && !showLoaderImage) || (dataSource && !dataSource.filteredData.length && !showLoaderImage)">
+                                No records found!
+                            </h3>
+                            <ng-conainer>
+                                <app-mat-table-paginator [dataSource]="dataSource" #myPaginatorChildComponent
+                                    (paginator)="matTablePaginator($event)"
+                                    (scrollBarDirective)="onPaginateViewScrollToTop()"></app-mat-table-paginator>
+                            </ng-conainer>
+                        </div>
+                        <ng-template #matTable>
+                            <table mat-table [dataSource]="dataSource" class="table table-striped table-bordered"
+                                matSort>
+                                <ng-container matColumnDef="id">
+                                    <th i18n="Table id|Sno@@sNo" mat-header-cell *matHeaderCellDef>S.No.</th>
+                                    <td mat-cell *matCellDef="let element; let i = index;">
+                                        {{ (i+1) + (myPaginator.pageIndex * myPaginator.pageSize) }}</td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="entityName">
+                                    <th i18n="Table|Entity Name@@entityNameTable" mat-header-cell *matHeaderCellDef>
+                                        <ng-container>
+                                            <mat-checkbox matTooltip="{{checkBoxToolTip}}"
+                                                (change)="$event ? masterToggle($event) : null"
+                                                [checked]="selection.hasValue() && isAllSelected()"
+                                                [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                                [aria-label]="checkboxLabel()">
+                                            </mat-checkbox> Entity Name
+                                        </ng-container>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <mat-checkbox (click)="$event.stopPropagation()"
+                                            (change)="$event ? masterSingleSelectionToggle($event,element) : null"
+                                            [checked]="selection.isSelected(element)"
+                                            [aria-label]="checkboxLabel(element)">
+                                        </mat-checkbox> {{element.entityName}}
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="read">
+                                    <th mat-header-cell mat-header-cell *matHeaderCellDef>
+                                        <ng-container *ngIf="isAllSelected()">
+                                            <mat-checkbox matTooltip="{{readCheckBoxToolTip}}"
+                                                (change)="$event ? masterReadToggle($event) : null"
+                                                [checked]="readSelection.hasValue() && isAllReadSelected()"
+                                                [indeterminate]="readSelection.hasValue() && !isAllReadSelected()"
+                                                [aria-label]="checkboxLabel()">
+                                            </mat-checkbox> Read
+                                        </ng-container>
+                                        <ng-container *ngIf="!isAllSelected()">
+                                            <mat-checkbox matTooltip="{{readCheckBoxToolTip}}"
+                                                (change)="$event ? masterReadToggle($event) : null"
+                                                [checked]="readSelection.hasValue() && isAllReadSelected()"
+                                                [indeterminate]="readSelection.hasValue() && !isAllReadSelected()"
+                                                [disabled]="true" [aria-label]="checkboxLabel()">
+                                            </mat-checkbox> Read
+                                        </ng-container>
+                                    </th>
+
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleReadSelection($event,element) : null"
+                                                [checked]="readSelection.isSelected(element.dataAccessDetail[0])"
+                                                [aria-label]="checkboxLabel(element)">
+                                            </mat-checkbox> 
+                                        </ng-container>
+                                        <ng-container *ngIf="!element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleReadSelection($event,element) : null"
+                                                [checked]="readSelection.isSelected(element.dataAccessDetail[0])"
+                                                [aria-label]="checkboxLabel(element)" [disabled]="true">
+                                            </mat-checkbox> 
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="update">
+                                    <th mat-header-cell mat-header-cell *matHeaderCellDef>
+                                        <ng-container *ngIf="isAllSelected()">
+                                            <mat-checkbox matTooltip="{{updateCheckBoxToolTip}}"
+                                                (change)="$event ? masterUpdateToggle($event) : null"
+                                                [checked]="updateSelection.hasValue() && isAllUpdateSelected()"
+                                                [indeterminate]="updateSelection.hasValue() && !isAllUpdateSelected()"
+                                                [aria-label]="checkboxLabel()">
+                                            </mat-checkbox> Update
+                                        </ng-container>
+                                        <ng-container *ngIf="!isAllSelected()">
+                                            <mat-checkbox matTooltip="{{updateCheckBoxToolTip}}"
+                                                (change)="$event ? masterUpdateToggle($event) : null"
+                                                [checked]="updateSelection.hasValue() && isAllUpdateSelected()"
+                                                [indeterminate]="updateSelection.hasValue() && !isAllUpdateSelected()"
+                                                [disabled]="true" [aria-label]="checkboxLabel()">
+                                            </mat-checkbox> Update
+                                        </ng-container>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleUpdateSelection($event,element) : null"
+                                                [checked]="updateSelection.isSelected(element.dataAccessDetail[1])"
+                                                [aria-label]="checkboxLabel(element)">
+                                            </mat-checkbox> 
+                                        </ng-container>
+                                        <ng-container *ngIf="!element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleUpdateSelection($event,element) : null"
+                                                [checked]="updateSelection.isSelected(element.dataAccessDetail[1])"
+                                                [aria-label]="checkboxLabel(element)" [disabled]="true">
+                                            </mat-checkbox> 
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="delete">
+                                    <th mat-header-cell mat-header-cell *matHeaderCellDef>
+                                        <ng-container *ngIf="isAllSelected()">
+                                            <mat-checkbox matTooltip="{{deleteCheckBoxToolTip}}"
+                                                (change)="$event ? masterDeleteToggle($event) : null"
+                                                [checked]="deleteSelection.hasValue() && isAllDeleteSelected()"
+                                                [indeterminate]="deleteSelection.hasValue() && !isAllDeleteSelected()"
+                                                [aria-label]="checkboxLabel()">
+                                            </mat-checkbox> Delete
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!isAllSelected()">
+                                            <mat-checkbox matTooltip="{{deleteCheckBoxToolTip}}"
+                                                (change)="$event ? masterDeleteToggle($event) : null"
+                                                [checked]="deleteSelection.hasValue() && isAllDeleteSelected()"
+                                                [indeterminate]="deleteSelection.hasValue() && !isAllDeleteSelected()"
+                                                [aria-label]="checkboxLabel()" [disabled]="true">
+                                            </mat-checkbox> Delete
+                                        </ng-container>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleDeleteSelection($event,element) : null"
+                                                [checked]="deleteSelection.isSelected(element.dataAccessDetail[2])"
+                                                [aria-label]="checkboxLabel(element.dataAccessDetail[2])">
+                                            </mat-checkbox> 
+                                        </ng-container>
+                                        <ng-container *ngIf="!element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleDeleteSelection($event,element) : null"
+                                                [checked]="deleteSelection.isSelected(element.dataAccessDetail[2])"
+                                                [aria-label]="checkboxLabel(element.dataAccessDetail[2])"
+                                                [disabled]="true">
+                                            </mat-checkbox> 
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="monitor">
+                                    <th mat-header-cell mat-header-cell *matHeaderCellDef>
+                                        <ng-container *ngIf="isAllSelected()">
+                                            <mat-checkbox matTooltip="{{monitorCheckBoxToolTip}}"
+                                                (change)="$event ? masterMonitorToggle($event) : null"
+                                                [checked]="monitorSelection.hasValue() && isAllMonitorSelected()"
+                                                [indeterminate]="monitorSelection.hasValue() && !isAllMonitorSelected()"
+                                                [aria-label]="checkboxLabel()">
+                                            </mat-checkbox> Monitor
+                                        </ng-container>
+                                        <ng-container *ngIf="!isAllSelected()">
+                                            <mat-checkbox matTooltip="{{monitorCheckBoxToolTip}}"
+                                                (change)="$event ? masterMonitorToggle($event) : null"
+                                                [checked]="monitorSelection.hasValue() && isAllMonitorSelected()"
+                                                [indeterminate]="monitorSelection.hasValue() && !isAllMonitorSelected()"
+                                                [aria-label]="checkboxLabel()" [disabled]="true">
+                                            </mat-checkbox> Monitor
+                                        </ng-container>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleMonitorSelection($event,element) : null"
+                                                [checked]="monitorSelection.isSelected(element.dataAccessDetail[3])"
+                                                [aria-label]="checkboxLabel(element.dataAccessDetail[3])">
+                                            </mat-checkbox> 
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleMonitorSelection($event,element) : null"
+                                                [checked]="monitorSelection.isSelected(element.dataAccessDetail[3])"
+                                                [aria-label]="checkboxLabel(element.dataAccessDetail[3])"
+                                                [disabled]="true">
+                                            </mat-checkbox> 
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="control">
+                                    <th mat-header-cell mat-header-cell *matHeaderCellDef>
+                                        <ng-container *ngIf="isAllSelected()">
+                                            <mat-checkbox matTooltip="{{controlCheckBoxToolTip}}"
+                                                (change)="$event ? masterControlToggle($event) : null"
+                                                [checked]="controlSelection.hasValue() && isAllControlSelected()"
+                                                [indeterminate]="controlSelection.hasValue() && !isAllControlSelected()"
+                                                [aria-label]="checkboxLabel()">
+                                            </mat-checkbox> Control
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!isAllSelected()">
+                                            <mat-checkbox matTooltip="{{controlCheckBoxToolTip}}"
+                                                (change)="$event ? masterControlToggle($event) : null"
+                                                [checked]="controlSelection.hasValue() && isAllControlSelected()"
+                                                [indeterminate]="controlSelection.hasValue() && !isAllControlSelected()"
+                                                [aria-label]="checkboxLabel()" [disabled]="true">
+                                            </mat-checkbox> Control
+                                        </ng-container>
+                                    </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <ng-container *ngIf="element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleControlSelection($event,element) : null"
+                                                [checked]="controlSelection.isSelected(element.dataAccessDetail[4])"
+                                                [aria-label]="checkboxLabel(element.dataAccessDetail[4])">
+                                            </mat-checkbox> 
+                                        </ng-container>
+
+                                        <ng-container *ngIf="!element.isSelected">
+                                            <mat-checkbox (click)="$event.stopPropagation()"
+                                                (change)="$event ? singleControlSelection($event,element) : null"
+                                                [checked]="controlSelection.isSelected(element.dataAccessDetail[4])"
+                                                [aria-label]="checkboxLabel(element.dataAccessDetail[4])"
+                                                [disabled]="true">
+                                            </mat-checkbox> 
+                                        </ng-container>
+                                        <ng-container *ngIf="checkedGatewayIds.size!=0">
+                                            <ng-container *ngFor="let checkedGatewayId of checkedGatewayIds">
+                                                <span class="help-block p-3 m-2"
+                                                    *ngIf="checkedGatewayId===element.entityId">
+                                                    <span class="text-nowrap"
+                                                        i18n="Message|Please select atleast one access type@@accessType.message">Please
+                                                        select atleast one Access Type</span>
+                                                </span>
+                                            </ng-container>
+                                        </ng-container>
+                                    </td>
+                                </ng-container>
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                            </table>
+                        </ng-template>
+                    </app-panel-user>
+                </div>
+
+
+                <div class="path finalLine"></div>
+                <div class="row" style="text-align: right;padding: 23px 0;">
+                    <div class="col-md-12">
+                        &nbsp;
+                        <button type="button" class="btn btn-secondary text-center resetActionButton"
+                            [disabled]="!dataAccessForm.dirty && dataAccessForm.pristine"
+                            (click)="resetdataAccessForm()" i18n="Reset button|Reset@@reset"> Reset
+                        </button>
+                        &nbsp;
+                        <span i18n-matTooltip="Tooltip validation|Fill the mandatory fields@@fillTheMandatoryFields"
+                            matTooltip="Fill the mandatory fields"
+                            [matTooltipDisabled]="dataAccessForm.valid && saveButtonDisableStatus">
+                            <a>
+                                <button class="btn btn-primary text-center saveActionButton" type="submit"
+                                [disabled]="!(dataAccessForm.valid && saveButtonDisableStatus)" i18n="Save button|Save@@Save">
+                                    Save</button>
+                            </a>
+                        </span>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<!-- Access Group Form ends here -->
+
+
+<!-- Loader image -->
+<div *ngIf="showLoaderImage" class="col-lg-12 loaderImageStyle" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+    align="center">
+    <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+</div>
+<!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification (modelNotificationSuccess)="redirectTo()">
+</app-modal-notification>

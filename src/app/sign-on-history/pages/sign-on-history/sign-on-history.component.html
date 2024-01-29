@@ -1,0 +1,203 @@
+<h1 class="page-header">
+  Signon History 
+</h1>
+<div class="row margin_0px rowBox margin_top_5px m-b-75" style="padding-top: 5px;">
+ <div class="col-md-12 padding_0px">
+   <div class="padding_Form">
+   <form [formGroup]="signOnHistory" >
+     <a class="link" matTooltip="View Logged-in User(s)" style="color: blue; float: right; margin-right: 28px; margin-top: 10px;"
+       (click)="showCurrentSignOnUser($event)" href="javascript:void(0);"><b>Logged-in User(s)</b></a>
+     <div class="form-group-custom1">
+
+       <div class="m-form__group row">
+   
+       <div class="col-md-4">
+         <div class="form-group" >
+           <label>User<span class="text-danger">*</span></label>
+           <div [ngClass]="{'has-error': ((signOnHistory.get('user').touched ||
+                     signOnHistory.get('user').dirty) &&
+                     signOnHistory.get('user').errors)}" >
+                     <ejs-dropdowntree id='dropdownTree' formControlName="user" name="user"
+                     placeholder="--Select--" [fields]='dropDownData' [allowFiltering]='allowFiltering'
+                  [filterBarPlaceholder]='filterBarPlaceholder' popupHeight='220px' [sortOrder]="sortDropDown"
+                  [allowFiltering]='true' (select)="dropDownUserName($event)">
+                    </ejs-dropdowntree>
+             <span class="help-block"
+               *ngIf="signOnHistory.get('user').touched && signOnHistory.get('user').hasError('required')">Enter User
+               Name</span>
+           </div>
+         </div>
+     </div>
+   
+       <div class="col-md-4 ">
+         <label>Start Date/Time<span class="text-danger">*</span></label>
+         <div class="form-group">
+           <div class="input-group">
+             <span class="help-block"
+               *ngIf="signOnHistory.get('startDate').touched && signOnHistory.get('startDate').hasError('required')">Enter
+               Start Date</span>
+             <input (click)="d2.toggle()" class="form-control" placeholder="MM/DD/YYYY" formControlName="startDate"
+               placement="bottom-right" ngbDatepicker #d2="ngbDatepicker" [maxDate]="endDate" 
+               (dateSelect)="addMinDateValue()" (keyup)="validateFromDate()" (ngModelChange)="changeStartDate($event)">
+             <div>
+               <input type="time" id="startTime" formControlName="startTime" value="00:00" name="startTime"
+                 (click)="validateStartAndEndTime($event.target.id)"
+                 (keyup)="validateStartAndEndTime($event.target.id)"
+                 (change)="validateStartAndEndTime($event.target.id)" class="form-control m-input" />
+           </div>
+         </div>
+             <span class="help-block" *ngIf="validateEndTime">
+               <span style="text-align: right;">Start Date/Time should be less than End Date/Time
+               </span>
+             </span>
+         </div>
+       </div>
+
+       <div class="col-md-4 ">
+         <label>End Date/Time<span class="text-danger">*</span></label>
+         <div class="form-group">
+           <div class="input-group">
+             <input (click)="d1.toggle()" class="form-control" placeholder="MM/DD/YYYY" formControlName="endDate"
+               placement="bottom-right" ngbDatepicker #d1="ngbDatepicker" [maxDate]="todayDate" [minDate]="minDate"
+               (dateSelect)="validateFromStartFromEndDate()" (ngModelChange)="changeEndDate($event)">
+             <div>
+               <input type="time" id="endTime" placeholder="HH:mm" formControlName="endTime" 
+                 (click)="validateStartAndEndTime($event.target.id)"
+                 (keyup)="validateStartAndEndTime($event.target.id)"
+                 (change)="validateStartAndEndTime($event.target.id)" class="form-control m-input" />
+             </div>
+           </div>
+           <span class="help-block" *ngIf="validateEndTime">
+             <span style="text-align: right;"> End
+               Date/Time should be greater than Start Date/Time
+             </span>
+           </span>
+         </div>
+       </div>
+       </div>
+
+       <div class="path finalLine"></div>
+     <div class="row">
+       <div class="col-md-12">
+         <span matTooltip="No Data available to Reset" [matTooltipDisabled]="!btnDisabled">
+           <button type="button" class="btn btn-secondary text-center resetActionButton" [disabled]="btnDisabled"
+           (click)="resetForm()">
+            Reset
+          </button>
+          &nbsp;
+          </span>
+          &nbsp;
+         <span matTooltip="Fill the mandatory fields" [matTooltipDisabled]="!btnDisabled">
+           <button class="btn btn-primary text-center float-right" type="submit"
+           [disabled] = "btnDisabled"
+           (click)="getUserSignonHistory($event)">
+             View
+           </button>
+         </span>
+       </div>
+     </div>
+
+   </div>
+
+   </form>
+</div>
+</div>
+
+
+   <!-- Display table for Logged-in User(s)-->
+   <div class="container" *ngIf="showCurrentLoggedInUser">
+     <div class="row margin_0px rowBox margin_top_5px">
+       <div class="col-md-12 padding_0px">
+         <div class="panel panel-inverse position-relative" style="margin-bottom: 0px;">
+           <app-panel-user name="List of Logged-in User(s)" #panelHeader (refreshTableList)="refreshTableListFunction()">
+             <span downloadButton class="ml-2 d-inline-block" >
+               <app-export-files-to (exportedTo)="downloadFile($event)"></app-export-files-to>
+             </span>
+             <div>
+             <mat-table #table [dataSource]="field" class="table table-striped table-bordered" matSort style="max-height:320px;">
+               <ng-container matColumnDef="slno" >
+                 <mat-header-cell *matHeaderCellDef> S.No.</mat-header-cell>
+                 <mat-cell *matCellDef="let field ; let i= index">{{i+1}}</mat-cell>
+               </ng-container>
+
+               <ng-container matColumnDef="user" >
+                 <mat-header-cell *matHeaderCellDef> User </mat-header-cell>
+                 <mat-cell *matCellDef="let field;"><a href="javascript:;" (click)="getFieldData(field)" >{{field.value | hyphen}}</a></mat-cell>
+               </ng-container>
+
+               <ng-container matColumnDef="signontime" >
+                 <mat-header-cell *matHeaderCellDef> Sign-on Time </mat-header-cell>
+                 <mat-cell *matCellDef="let field">{{field.signonTimeStamp | hyphen}}</mat-cell>
+               </ng-container>
+               
+               <mat-header-row *matHeaderRowDef="displayedUserColumns;sticky:true;"></mat-header-row>
+               <mat-row *matRowDef="let row; columns: displayedUserColumns;"></mat-row>
+       </mat-table>
+             <div *ngIf="showLoaderImage" class="col-lg-12" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+             align="center">
+             <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+           </div>
+           <h3 class="text-center noRecordsFound"
+           *ngIf="noRecordFound">
+           No records found!
+         </h3>
+           </div>
+           </app-panel-user>
+         </div>
+       </div>
+     </div>
+     <app-mat-table-paginator [dataSource]="dataSource.data" #myPaginatorChildComponent (paginator)="matTablePaginator($event)" 
+     (scrollBarDirective)="onPaginateViewScrollToTop()"></app-mat-table-paginator>
+   </div>
+ 
+
+ <!-- View Table -->
+
+ <div class="container" *ngIf="showspecificUser">
+   <div class="row margin_0px rowBox margin_top_5px">
+     <div class="col-md-12 padding_0px">
+       <div class="panel panel-inverse position-relative" style="margin-bottom: 0px;">
+         <app-panel-user name="Sign-on  History of {{selectedUserName}}" #panelHeader (refreshTableList)="refreshTableListFunction()">
+           <span downloadButton class="ml-2 d-inline-block">
+             <app-export-files-to (exportedTo)="downloadFile($event)"></app-export-files-to>
+           </span>
+           <div>
+           <mat-table #table [dataSource]="field" class="table table-striped table-bordered" matSort style="max-height:320px;">
+             <ng-container matColumnDef="slno" >
+               <mat-header-cell *matHeaderCellDef> S.No.</mat-header-cell>
+               <mat-cell *matCellDef="let field ; let i= index">{{i+1}}</mat-cell>
+             </ng-container>
+
+             <ng-container matColumnDef="signontime" >
+               <mat-header-cell *matHeaderCellDef> Sign-on Time </mat-header-cell>
+               <mat-cell *matCellDef="let field">{{field.signonTimeStamp | hyphen}}</mat-cell>
+             </ng-container>
+
+             <ng-container matColumnDef="signouttime" >
+               <mat-header-cell *matHeaderCellDef> Sign-out Time </mat-header-cell>
+               <mat-cell *matCellDef="let field">{{field.signoutTimeStamp | hyphen}}</mat-cell>
+             </ng-container>
+             
+             <mat-header-row *matHeaderRowDef="displayColumns"></mat-header-row>
+             <mat-row *matRowDef="let row; columns: displayColumns;"></mat-row>
+     </mat-table>
+           <div *ngIf="showLoaderImage" class="col-lg-12" style="margin-left:0%; margin-top:0%;margin-bottom:0%;"
+           align="center">
+           <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+         </div>
+         <h3 class="text-center noRecordsFound"
+         *ngIf="noRecordFound">
+         No records found!
+       </h3>
+         </div>
+         </app-panel-user>
+       </div>
+     </div>
+   </div>
+   <app-mat-table-paginator [dataSource]="dataSource.data" #myPaginatorChildComponent (paginator)="matTablePaginator($event)" 
+(scrollBarDirective)="onPaginateViewScrollToTop()"></app-mat-table-paginator>
+ </div>
+ 
+
+</div>
+

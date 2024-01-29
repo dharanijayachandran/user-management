@@ -1,0 +1,147 @@
+<div class="row">
+    <div class="col-md-12">
+        <h1 i18n="Page header|My Organization Profile@@myOrganizationProfile" class="page-header">
+            My Organization Profile
+        </h1>
+    </div>
+</div>
+<!-- Loader image  -->
+<div *ngIf="showLoaderImage" class="col-lg-12" style="margin-left:0%; margin-top:0%;margin-bottom:0%;" align="center">
+    <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="35%" alt="Loading........">
+</div>
+<div class="row margin_0px rowBox margin_top_5px" *ngIf="organizationDetail">
+    <div class="col-md-12 padding_0px">
+        <div class="padding_Form formReadMode">
+            <div class="form-group-custom1" >
+                <legend i18n="Organization Details header|Organization Details@@organizationDetails" class="m-b-15">Organization Details</legend>
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Name|Name@@name" class="">Name</label>
+                        <p>
+                            {{organizationProfile.name | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Id|Id@@Id" class="">Id</label>
+                        <p>
+                            {{organizationProfile.id | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Maximum Users|Maximum Users@@maxUsers" class="">Maximum Users</label>
+                        <p>
+                            {{organizationProfile.numberOfUser | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Status|Status@@status" class="">Status</label>
+                        <p>
+                            {{organizationProfile.status | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Description|Description@@description" class="">Description</label>
+                        <p>
+                            {{organizationProfile.description | hyphen}}
+                        </p>
+                    </div>
+                </div>
+                <div class="path"></div>
+                <legend i18n="Contact Information header|Contact Information@@contactInfo" class="m-b-15">Contact Information</legend>
+                <div class="form-row">
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="E-mail ID|E-mail ID@@emailId" class="">E-mail ID</label>
+                        <p>
+                            {{organizationProfile.emaild | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Website|Website@@website" class="">Website</label>
+                        <p>
+                            {{organizationProfile.webSite | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Fax|Fax@@fax" class="">Fax</label>
+                        <p>
+                            {{organizationProfile.faxNumber | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Skype ID|Skype ID@@skypeID" class="">Skype ID</label>
+                        <p>
+                            {{organizationProfile.skypeId | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Mobile Number|Mobile Number@@mobileNumber" class="">Mobile Number</label>
+                        <p>
+                            {{organizationProfile.mobileNumberPrimary | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Mobile Number Alternate|Mobile Number (Alternate)@@mobileNumberAlternate" class="">Mobile Number (Alternate)</label>
+                        <p>
+                            {{organizationProfile.mobileNumberSecondary | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Phone Number|Phone Number@@phoneNumber" class="">Phone Number</label>
+                        <p>
+                            {{organizationProfile.phoneNumberPrimary | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-6">
+                        <label i18n="Phone Number Alternate|Phone Number (Alternate)@@phoneNumberAlternate" class="">Phone Number (Alternate)</label>
+                        <p>
+                            {{organizationProfile.phoneNumberSecondary | hyphen}}
+                        </p>
+                    </div>
+                </div>
+                <div class="path"></div>
+                <legend i18n="Address Details header|Address Details@@addessDetails" class="m-b-15 ">Address Details</legend>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <label i18n="Address|Address@@address" class="">Address</label>
+                        <p class="mb-3" *ngIf="this.organizationProfile.addresses.length != 0">
+                            {{organizationAddress.addressLine1 | hyphen}}
+                        </p>
+                        <p *ngIf="this.organizationProfile.addresses.length != 0">
+                            {{organizationAddress.addressLine2}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label i18n="ZipCode|Zip Code@@zipCode" class="">Zip Code</label>
+                        <p *ngIf="this.organizationProfile.addresses.length != 0">
+                            {{organizationAddress.zipCode | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label i18n="City/Town|City/Town@@city/Town" class="">City/Town</label>
+                        <p *ngIf="this.organizationProfile.addresses.length != 0">
+                            {{organizationAddress.city | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label i18n="Country|Country@@country" class="">Country</label>
+                        <p *ngIf="this.organizationProfile.addresses.length != 0">
+                            {{organizationAddress.country | hyphen}}
+                        </p>
+                    </div>
+                    <div class="form-group col-sm-6 col-md-3">
+                        <label i18n="State|State@@state" class="">State</label>
+                        <p *ngIf="this.organizationProfile.addresses.length != 0">
+                            {{organizationAddress.state | hyphen}}
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <h3 i18n="No records found text|No records found@@noRecordsFound" *ngIf="noRecordsFound" class="text-center noRecordsFound">
+                No records found!
+            </h3>
+            <div class="path finalLine"></div>
+        </div>
+    </div> 
+</div>
+<!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification></app-modal-notification>

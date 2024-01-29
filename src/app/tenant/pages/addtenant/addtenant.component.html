@@ -1,0 +1,453 @@
+<div class="row">
+  <div class="col-md-12">
+    <h1 i18n="Page header|Tenant@@tenant" class="page-header" *ngIf="tenatFormView">
+        {{addEditText}} Tenant
+    </h1>
+    <h1 i18n="Page header|Preview Tenant@@previewTenant" class="page-header" *ngIf="tenantReadModeView">
+      Preview {{addEditText}} Tenant
+    </h1>
+  </div>
+</div>
+
+<div class="row margin_0px rowBox margin_top_5px">
+  <div class="col-md-12 padding_0px">
+    <div class="padding_Form">
+      <!-- Tenant form view starts here  -->
+      <form [formGroup]="tenantForm" novalidate (ngSubmit)="createTenant()" *ngIf="tenatFormView">
+        <div class="form-group-custom1">
+          <legend i18n="Tenant Details header|Tenant Details@@tenantDetails" class="m-b-15">Tenant Details</legend>
+          <div class="formBodyCustom1" id="tenatDetail">
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Name|Name@@name*" class="">Name<span class="text-danger">*</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((tenantForm.get('name').touched ||
+                          tenantForm.get('name').dirty) &&
+                          tenantForm.get('name').errors)}">
+                    <input (keyup)="onKey($event)" type="text" id="tenantFullName" formControlName="name" class="form-control m-input"
+                      i18n-placeholder="Tenant Name placeholder|Enter Tenant Name@@tenantName.placeholder" placeholder="Enter Tenant Name">
+                    <span class="help-block" *ngIf="((tenantForm.get('name').touched ||
+                                    tenantForm.get('name').dirty) &&
+                                    tenantForm.get('name').errors)">
+                      <span i18n="Message|Please enter Tenant Name@@tenantName.message" *ngIf="(tenantForm.get('name').errors.required || tenantForm.get('name').errors.whitespace)">
+                        Please enter Tenant Name
+                      </span>
+                      <span i18n="Message|Please enter valid Characters@@tenantName.message1" *ngIf="tenantForm.get('name').errors.pattern">
+                        Please enter valid Characters
+                      </span>
+                      <span>
+                        
+                      </span>
+                    </span>
+                  </div>
+                </div>
+                  <div>
+                    <mat-checkbox i18n="Maximum Users|Maximum Users@@maxUsers" [disabled]="maxUserCheckDisabled" [checked]="maxUserCheck"
+                      (change)="displayMaxUsers($event)" i18n-matTooltip="@@Clicktoenable/Disable"
+                      matTooltip="{{MaxUserCheckToolTip}}">Maximum Users</mat-checkbox>
+                      <div class="form-group">
+                        <div [ngClass]="{'has-error': ((tenantForm.get('numberOfUsers').touched ||
+                      tenantForm.get('numberOfUsers').dirty) &&
+                      tenantForm.get('numberOfUsers').errors)}">
+                          <input [readonly]='isMaxUsers' type="text" id="numberOfUsers" formControlName="numberOfUsers"
+                            class="form-control m-input" i18n-placeholder="@@MaxUser.placeholder"
+                            placeholder="Enter maximun number of Users" (keyup)="validateInputValue($event)">
+                          <span class="help-block" *ngIf="((tenantForm.get('numberOfUsers').touched ||
+                          tenantForm.get('numberOfUsers').dirty) &&
+                          tenantForm.get('numberOfUsers').errors)">
+                            <span i18n="Message|Please select Maximum Users@@maxUsers.message" *ngIf="tenantForm.get('numberOfUsers').errors.required"
+                              class="text-danger">
+                              Please enter Maximum Users
+                            </span>
+                            <span i18n="Message|Please select Maximum Users less than@@maxUsersLessThan.message" *ngIf="tenantForm.get('numberOfUsers').errors.lessThanUser"
+                              class="text-danger">
+                              Please enter Maximum Users less than are equal to <span>{{reminingUser}}</span>
+                            </span>
+                            <span i18n="Message|Please select Maximum Users less than@@maxUsersLessThan.message" *ngIf="tenantForm.get('numberOfUsers').errors.lessThanUserBetween"
+                              class="text-danger">
+                              Please enter Maximum Users between <span>{{this.numberOfUserForCheck}}</span> and <span>{{reminingUser}}</span>
+                            </span>
+                            <span i18n="Message|Please enter only Numbers@@maxUsers.message1" *ngIf="tenantForm.get('numberOfUsers').errors.pattern"
+                              class="text-danger">
+                              Please enter only Numbers
+                            </span>
+                            <span i18n="Message|Maximum number of users already created, please contact administrator@@maxUsersLimitReached.message1" *ngIf="tenantForm.get('numberOfUsers').errors.limiteReached"
+                              class="text-danger">
+                              Maximum number of users already created, please contact administrator
+                            </span>
+                          </span>
+                        </div>
+                      </div>
+                  </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Description|Description@@description" class="">Description</label>
+                <div class="form-group">
+                  <textarea i18n-placeholder="@@Description.placeholder" type="text" id="description" formControlName="description" class="form-control m-input textAreaHeight"
+                   i18n-placeholder="Description placeholderEnter Description@@description.placeholder" placeholder="Enter Description"></textarea>
+                </div>
+              </div>
+            </div>
+            <div class="m-form__group row">
+              <div class="col-lg-6" style="padding-left: 10px; padding-right: 15px;">
+                <label i18n="Status|Status@@status">Status
+                  <!-- <span class="text-danger">*</span> -->
+                </label>
+                <div class="form-group">
+                  <mat-radio-group formControlName="status">
+                    <mat-radio-button value="Active" i18n="Radio button|Active@@active" style="margin-right: 20px;" id="tenantStatusA">Active
+                    </mat-radio-button>
+                    <mat-radio-button id="tenantStatusI" value="In_Active" i18n="Radio button|InActive@@inActive">In-Active</mat-radio-button>
+                  </mat-radio-group>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="path"></div>
+        <div class="form-group-custom1">
+          <legend i18n="Contact Information header|Contact Information@@contactInformation" class="m-b-15">Contact Information</legend>
+          <div class="formBodyCustom1" id="contactInfo">
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="E-mail ID|E-mail ID@@e-mailID*">E-mail ID<span class="text-danger">*</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((tenantForm.get('emaild').touched ||
+                    tenantForm.get('emaild').dirty) &&
+                    tenantForm.get('emaild').errors)}">
+                    <input type="email" formControlName="emaild" id="tenantEmailId" class="form-control m-input"
+                      i18n-placeholder="E-mail placeholder|Enter E-mail ID@@e-mail ID.placeholder" placeholder="Enter E-mail ID">
+                    <span class="help-block" *ngIf="((tenantForm.get('emaild').touched ||
+                                tenantForm.get('emaild').dirty) &&
+                                tenantForm.get('emaild').errors)">
+                      <span i18n="Message|Please enter E-mail ID@@e-mailID.message1" *ngIf="tenantForm.get('emaild').errors.required">
+                        Please enter E-mail ID
+                      </span>
+                      <span i18n="Message|Please enter valid E-mail ID@@e-mailID.message2" *ngIf="tenantForm.get('emaild').errors.email">
+                        Please enter valid E-mail ID
+                      </span>
+                    </span>
+                  </div>
+                  <span id="tenantEmailIdValMsg" class="errorMsg"></span>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Website|Website@@website*" class="">Website<span class="text-danger">*</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((tenantForm.get('webSite').touched ||
+                    tenantForm.get('webSite').dirty) &&
+                    tenantForm.get('webSite').errors)}">
+                    <input type="text" id="tenantWebsite" formControlName="webSite" class="form-control m-input"
+                      i18n-placeholder="Website placeholder|Enter Website URL@@websiteURL.placeholder" placeholder="Enter Website URL">
+                    <span class="help-block" *ngIf="((tenantForm.get('webSite').touched ||
+                                tenantForm.get('webSite').dirty) &&
+                                tenantForm.get('webSite').errors)">
+                      <span i18n="Message|Please enter Website URL@@websiteURL.message1" *ngIf="tenantForm.get('webSite').errors.required">
+                        Please enter Website URL
+                      </span>
+                      <span i18n="Message|Please enter valid Website URL@@websiteURL.message2" *ngIf="tenantForm.get('webSite').errors.pattern">
+                        Please enter valid Website URL
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Fax|Fax@@fax">Fax</label>
+                <div class="form-group ">
+                  <div [ngClass]="{'has-error': ((tenantForm.get('faxNumber').dirty) && tenantForm.get('faxNumber').errors)}">
+                    <input type="text" id="tenantFax" formControlName="faxNumber" class="form-control m-input"
+                    i18n-placeholder="Fax placeholder|Enter Fax@@fax.placeholder" placeholder="Enter Fax"/>
+                  </div>
+                  <span class="help-block" *ngIf="((tenantForm.get('faxNumber').dirty) &&
+                                tenantForm.get('faxNumber').errors)">
+                      <span i18n="Message|Please enter only Numbers@@fax.message1" *ngIf="tenantForm.get('faxNumber').errors.pattern">
+                          Please enter only Numbers
+                      </span>
+                  </span>                  
+                </div>
+                <span id="tenantFaxValMsg" class="errorMsg"></span>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Skype ID|Skype ID@@skypeID">Skype ID</label>
+                <div class="form-group ">
+                  <input type="text" id="tenantSkypeId" formControlName="skypeId" class="form-control m-input"
+                    i18n-placeholder="SkypeID placeholder|Enter Skype ID@@skypeID.placeholder" placeholder="Enter Skype ID">
+                </div>
+                <span id="tenantSkypeIdValMsg" class="errorMsg"></span>
+              </div>
+            </div>
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Mobile Number|Mobile Number@@mobileNumber.primary*">Mobile Number<span class="text-danger">*</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((tenantForm.get('mobileNumberPrimary').touched ||
+                    tenantForm.get('mobileNumberPrimary').dirty) &&
+                    tenantForm.get('mobileNumberPrimary').errors)}">
+                    <input type="text" id="tenantPrimaryMobile" formControlName="mobileNumberPrimary"
+                      class="form-control m-input" i18n-placeholder="Mobile Number placeholder|Enter Mobile Number@@mobileNumber.primary.placeholder"
+                      placeholder="Enter Mobile Number" >
+                    <span class="help-block" *ngIf="((tenantForm.get('mobileNumberPrimary').touched ||
+                                tenantForm.get('mobileNumberPrimary').dirty) &&
+                                tenantForm.get('mobileNumberPrimary').errors)">
+                      <span i18n="Message|Please enter Mobile Number@@mobileNumber.primary.message1" *ngIf="tenantForm.get('mobileNumberPrimary').errors.required">
+                        Please enter Mobile Number
+                      </span>                     
+                      <span i18n="Message|Please enter only Numbers@@mobileNumber.primary.message2" *ngIf="tenantForm.get('mobileNumberPrimary').errors.pattern" class="display_inherit">
+                          Please enter only Numbers
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Mobile Number Alternate|Mobile Number (Alternate)@@mobileNumberAlternate">Mobile Number (Alternate)</label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((tenantForm.get('mobileNumberSecondary').dirty) && tenantForm.get('mobileNumberSecondary').errors)}">
+                      <input type="text" id="tenantSecondaryMobile" formControlName="mobileNumberSecondary"
+                      class="form-control m-input" i18n-placeholder="Mobile Number placeholder|Enter Mobile Number (Alternate)@@mobileNumberAlternate.placeholder"
+                      placeholder="Enter Mobile Number (Alternate)"/>
+                  </div>
+                  <span class="help-block" *ngIf="((tenantForm.get('mobileNumberSecondary').dirty) &&
+                                tenantForm.get('mobileNumberSecondary').errors)">
+                      <span i18n="Message|Please enter only Numbers@@mobileNumberAlternate.message1" *ngIf="tenantForm.get('mobileNumberSecondary').errors.pattern"  class="display_inherit">
+                          Please enter only Numbers
+                      </span>
+                  </span>
+                </div>
+                <span id="tenantSecondaryMobileValMsg" class="errorMsg"></span>
+              </div>
+            </div>
+            <div class="m-form__group row">
+              <div class="col-lg-6">
+                <label i18n="Phone Number|Phone Number@@phoneNumber*">Phone Number<span class="text-danger">*</span></label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((tenantForm.get('phoneNumberPrimary').touched ||
+                    tenantForm.get('phoneNumberPrimary').dirty) &&
+                    tenantForm.get('phoneNumberPrimary').errors)}">
+                    <input formControlName="phoneNumberPrimary" type="text" id="tenantPrimaryPhone"
+                      class="form-control m-input" i18n-placeholder="Phone number placeholder|Enter Phone Number@@phoneNumber.placeholder"
+                      placeholder="Enter Phone Number">
+                    <span class="help-block" *ngIf="((tenantForm.get('phoneNumberPrimary').touched ||
+                                tenantForm.get('phoneNumberPrimary').dirty) &&
+                                tenantForm.get('phoneNumberPrimary').errors)">
+                      <span i18n="Message|Please enter Phone Number@@phoneNumber.message1" *ngIf="tenantForm.get('phoneNumberPrimary').errors.required">
+                        Please enter Phone Number
+                      </span>
+                      <!-- <span i18n="@@Phone.message1" *ngIf="tenantForm.get('phoneNumberPrimary').errors.minlength">
+                          Please enter Phone Number 10 digit.
+                      </span> -->
+                      <span i18n="Message|Please enter only Numbers@@phoneNumber.message2" *ngIf="tenantForm.get('phoneNumberPrimary').errors.pattern">
+                        Please enter only Numbers
+                      </span>
+                    </span>
+                  </div>
+                </div>
+
+              </div>
+              <div class="col-lg-6">
+                <label i18n="Phone Number Alternate|Phone Number Alternate@@phoneNumberAlternate">Phone Number (Alternate)</label>
+                <div class="form-group">
+                  <div [ngClass]="{'has-error': ((tenantForm.get('phoneNumberSecondary').dirty) && tenantForm.get('phoneNumberSecondary').errors)}">
+                      <input type="text" id="tenantSecondaryPhone" formControlName="phoneNumberSecondary"
+                      class="form-control m-input" i18n-placeholder="Phone number placeholder|Enter Phone Number Alternate@@phoneNumberAlternate.placeholder"
+                      placeholder="Enter Phone Number (Alternate)">
+                      <span class="help-block" *ngIf="((tenantForm.get('phoneNumberSecondary').dirty) &&
+                      tenantForm.get('phoneNumberSecondary').errors)">
+                        <span i18n="Message|Please enter only Numbers@@phoneNumberAlternate.message1" *ngIf="tenantForm.get('phoneNumberSecondary').errors.pattern">
+                            Please enter only Numbers
+                        </span>
+                    </span>
+                  </div>
+                </div>
+                <span id="tenantSecondaryPhoneValMsg" class="errorMsg"></span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <app-address-form [group]="tenantForm.controls.address"></app-address-form>
+
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <a (click)="cancelButton()">
+              <button type="button" id="cancelTenant" class="btn btn-default text-center cancelActionButton"
+                 i18n="Cancel button|Cancel@@cancel"> Cancel
+              </button>
+            </a>
+            &nbsp;
+            <button type="button" class="btn btn-secondary text-center resetActionButton" [disabled]="!tenantForm.dirty && tenantForm.pristine || !tenantForm.dirty && !tenantForm.pristine"
+              (click)="resetTenantForm()" i18n="Reset button|Reset@@reset" > Reset </button>
+            &nbsp;
+            <span i18n-matTooltip="Tooltip validation|Fill the mandatory fields@@fillTheMandatoryFields" matTooltip="Fill the mandatory fields" [matTooltipDisabled]="tenantForm.valid">
+                <button i18n="Review&Save button|Review&Save@@review&Save" class="btn btn-primary text-center reviewAndSaveActionButton" type="submit" [disabled]="!tenantForm.valid">
+                    Review & Save</button>
+            </span>            
+          </div>
+        </div>
+      </form>
+      <!-- Tenant form view ends here  -->
+
+      <!-- Tenant form read mode view starts here  -->
+      <div *ngIf="tenantReadModeView" class="formReadMode">
+        <div class="form-group-custom1">
+          <legend i18n="Tenant Details header|Tenant Details@@TenantDetails" class="m-b-15">Tenant Details</legend>
+          <div class="form-row">
+            <a (click)="backButton('tenatDetail')" class="edit_section">
+              <img src="/assets/img/action/edit.png" alt="edit tenant details"
+              i18n-matTooltip="Image tooltip|Click to edit Tenant Details@@clickToEditTenantDetails" matTooltip="Click to Edit Tenant Details">
+            </a>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Name|Name@@name" class="">Name</label>
+              <p>
+                {{tenant?.name | hyphen}}
+              </p>
+            </div>            
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Maximum Users|Maximum Users@@maxUsers" class="">Maximum Users</label>
+              <p>
+                {{tenant?.numberOfUsers | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Status|Status@@status" class="">Status</label>
+              <p *ngIf="tenant.status == 'I'; else activeBlock">
+                In-Active
+              </p>
+              <ng-template #activeBlock>
+                <p>
+                  {{tenant?.status | hyphen}}
+                </p>
+              </ng-template>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+                <label i18n="Description|Description@@description" class="">Description</label>
+                <p>
+                  {{tenant?.description | hyphen}}
+                </p>
+              </div>
+          </div>
+          <div class="path"></div>
+          <legend i18n="Contact Information|Contact Information@@contactInformation" class="m-b-15">Contact Information</legend>
+          <div class="form-row">
+            <a (click)="backButton('contactInfo')" class="edit_section">
+              <img src="/assets/img/action/edit.png" alt="Click to Edit Contact Information"
+              i18n-matTooltip="Image tooltip|Click to edit Contact Information@@clickToEditContactInformation" matTooltip="Click to Edit Contact Information">
+            </a>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="E-mail ID|E-mail ID@@e-mailID" class="">E-mail ID</label>
+              <p>
+                {{tenant?.emaild | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Website|Website@@website" class="">Website</label>
+              <p>
+                {{tenant?.webSite | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Fax|Fax@@fax" class="">Fax</label>
+              <p>
+                {{tenant?.faxNumber | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Skype ID|Skype ID@@skypeID" class="">Skype ID</label>
+              <p>
+                {{tenant?.skypeId | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Mobile Number|Mobile Number@@mobileNumber" class="">Mobile Number</label>
+              <p>
+                {{tenant?.mobileNumberPrimary | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Mobile Number Alternate|Mobile Number (Alternate)@@mobileNumberAlternate" class="">Mobile Number (Alternate)</label>
+              <p>
+                {{tenant?.mobileNumberSecondary | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Phone Number|Phone Number@@phoneNumber" class="">Phone Number</label>
+              <p>
+                {{tenant?.phoneNumberPrimary | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-4">
+              <label i18n="Phone Number Alternate|Phone Number (Alternate)@@phoneNumberAlternate" class="">Phone Number (Alternate)</label>
+              <p>
+                {{tenant?.phoneNumberSecondary | hyphen}}
+              </p>
+            </div>
+          </div>
+          <div class="path"></div>
+          <legend i18n="Address Details header|Address Details@@addressDetails" class="m-b-15 ">Address Details</legend>
+          <div class="form-row">
+            <a (click)="backButton('addressDetail')" class="edit_section">
+              <img src="/assets/img/action/edit.png" alt="Click to Edit Address Details"
+              i18n-matTooltip="Image tooltip|Click to edit Address Details@@clickToeEitAddressDetails"  matTooltip="Click to Edit Address Details">
+            </a>
+            <div class="form-group col-md-12">
+              <label i18n="Address|Address@@address" class="">Address</label>
+              <p class="mb-3">
+                {{tenant?.address.addressLine1 | hyphen}}
+              </p>
+              <p>
+                {{tenant?.address.addressLine2}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="ZipCode|Zip Code@@zipCode" class="">Zip Code</label>
+              <p>
+                {{tenant?.address.zipCode | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="City/Town|City/Town@@city/Town" class="">City/Town</label>
+              <p>
+                {{tenant?.address.city | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="Country|Country@@country" class="">Country</label>
+              <p>
+                {{tenant?.address.countryName | hyphen}}
+              </p>
+            </div>
+            <div class="form-group col-sm-6 col-md-3">
+              <label i18n="State|State@@state" class="">State</label>
+              <p>
+                {{tenant?.address.stateName | hyphen}}
+              </p>
+            </div>
+          </div>
+        </div>
+        <div class="path finalLine"></div>
+        <div class="row" style="    text-align: right;padding: 23px 0;">
+          <div class="col-md-12">
+            <button type="button" class="btn btn-default text-center backActionButton" (click)="backButton($event)" i18n="Back button|Back@@back"> Back
+            </button>
+            &nbsp;
+            <button i18n="Save button|Save@@save" class="btn btn-primary text-center saveActionButton" type="submit" (click)="saveTenantInfo()">
+              Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Tenant form read mode view ends here  -->
+  </div>
+</div>
+
+<!-- Loader image  -->
+<div *ngIf="showLoaderImage" class="col-lg-12 loaderImageStyle" style="margin-left:0%; margin-top:0%;margin-bottom:0%;" align="center">
+  <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+</div>
+<!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification (modelNotificationSuccess)="gotoTenantList()" (modelNotificationWarning)="formResetConfirm()"></app-modal-notification>
+

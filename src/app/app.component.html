@@ -1,0 +1,20 @@
+
+
+<app-navigation-layout></app-navigation-layout>
+
+<ng-container *ngIf="sidebarMenuFlag">
+    <div class="content" [class.show]="sideMenuBarStatus">
+        <router-outlet></router-outlet>
+    </div>
+</ng-container>
+<ng-container *ngIf="topMenu">
+    <div class="top-content"> 
+        <router-outlet></router-outlet>
+    </div>
+</ng-container>
+<!-- <div class="content">
+    <router-outlet></router-outlet>
+</div> -->
+
+<!-- <div id="page-loader" class="fade show" *ngIf="loader"><span class="spinner"></span></div> -->
+

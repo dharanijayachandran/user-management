@@ -1,0 +1,112 @@
+<!-- <h1 i18n="@@AssignMenu" class="page-header classname">Assign Menus</h1> -->
+<div class="panel panel-inverse" style="position: relative">
+  <app-panel-user i18n-name="Panel|Tenant menu panel@@assignMenu" name="Assign Menus: {{organizationName}}" #panelHeader
+    (refreshTableList)="refreshTableListFunction()">
+
+    <!-- Back button -->
+    <a backButton href="javascript:;" i18n-matTooltip="Back button|Back to Tenant@@backToTenant"
+      matTooltip="Back to Manage Tenant" class="btn btn-xs btn-icon btn-circle btn-default backButton"
+      (click)="backToTenant()">
+      <i class="fa fa-angle-left" aria-hidden="true"></i>
+    </a>
+
+    <!-- Input field for search -->
+    <input searchfield style="display: none;" id="filter" class="form-control m-input ml-2"
+      (input)="filterChanged($event.target.value)" i18n-placeholder="Search Placeholder|Search Placeholde@@search"
+      matInput placeholder="Search.." />
+
+    <!-- Search button -->
+    <a searchButton href="javascript:;" i18n-matTooltip="Search Button tooltip|Click to Search button@@clicktoSearch"
+      matTooltip="Click to Search" class="btn btn-xs btn-icon btn-circle btn-default"
+      (click)="panelHeader.searchButton()">
+      <i class="fa fa-search"></i>
+    </a>
+    <div class="row margin_0px rowBox">
+      <div class="col-md-12 padding_0px">
+        <div class="padding_Form formReadMode">
+          <form [formGroup]="menuForm">
+            <div class="form-group-custom1">
+              <!-- <legend i18n="@@AssignMenus" class="m-b-15">
+            Assign Menus: {{gettingTenantDetailList.tenantName}}
+          </legend> -->
+
+              <!-- Loader image  -->
+              <div *ngIf="showLoaderImage" class="col-lg-12 loaderImageStyle"
+                style="margin-left:0%; margin-top:0%;margin-bottom:0%;" align="center">
+                <img src="/assets/img/dashboard/ProgressLoader.gif" height="auto" width="50%" alt="Loading........">
+              </div>
+              <div class="m-form__group row">
+                <div class="col-md-4 col-lg-4">
+                  <label i18n="Application|Application@@application" class="">Application<span
+                      class="text-danger">*</span></label>
+                  <div class="form-group">
+                    <ejs-dropdownlist id='ddlelement' class="form-control p-0" [dataSource]='applications'
+                      formControlName="tenantApplicationCode" (change)='applicationOnChange($event)'
+                      placeholder='Select Application Name' [fields]='applicationField'
+                      [placeholder]='applicationWaterMark' [popupHeight]='height' [sortOrder]="sortDropDown"
+                      [filterBarPlaceholder]="filterPlaceholder" [allowFiltering]='true' ></ejs-dropdownlist>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12">
+                <mat-tree [dataSource]="dataSource" [treeControl]="treeControl">
+                  <mat-tree-node *matTreeNodeDef="let node" [hidden]="!node.visible" matTreeNodeToggle
+                    matTreeNodePadding>
+                    <button mat-icon-button disabled></button>
+                    <mat-checkbox class="checklist-leaf-node" [checked]="checklistSelection.isSelected(node)"
+                      (change)="todoLeafItemSelectionToggle(node)">{{node.name}}</mat-checkbox>
+                  </mat-tree-node>
+
+                  <mat-tree-node *matTreeNodeDef="let node; when: hasChild" [hidden]="!node.visible" matTreeNodePadding>
+                    <button mat-icon-button matTreeNodeToggle [attr.aria-label]="'toggle ' + node.filename">
+                      <mat-icon class="mat-icon-rtl-mirror">
+                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                      </mat-icon>
+                    </button>
+                    <mat-checkbox [checked]="descendantsAllSelected(node)"
+                      [indeterminate]="descendantsPartiallySelected(node)"
+                      (change)="todoItemSelectionToggle(node,true)">
+                      {{node.name}}</mat-checkbox>
+                  </mat-tree-node>
+                </mat-tree>
+              </div>
+              <h3 i18n="No records found text|No records found@@noRecordsFound" class="text-center noRecordsFound"
+                *ngIf="noRecordBlock">
+                No records found!
+              </h3>
+            </div>
+            <div class="path finalLine" *ngIf="assignMenusBlock"></div>
+            <div class="row" style="text-align: right;padding: 23px 0;" *ngIf="assignMenusBlock">
+              <div class="col-md-12">
+                <a>
+                  <button type="button" class="btn btn-default text-center cancelActionButton"
+                    i18n="Cancel button|Cancel@@cancel" (click)="CancelTenantMenu()"> Cancel
+                  </button>
+                </a>
+                &nbsp;
+                <button type="button" class="btn btn-secondary text-center resetActionButton"
+                  (click)="resetTenantMenu()" i18n="Reset button|Reset@@reset" [disabled]='saveButtonDisableStatus'>
+                  Reset
+                </button>
+                &nbsp;
+                <span i18n-matTooltip="Tooltip validation|Select atleast one Menu tooltip@@selectAtLeastOneMenu"
+                  matTooltip="Select atleast one Menu" [matTooltipDisabled]="!saveButtonDisableStatus">
+                  <button i18n="Save button|Save@@save" class="btn btn-primary text-center saveActionButton"
+                    type="submit" (click)="SaveTenantMenu()" [disabled]='saveButtonDisableStatus'>
+                    Save</button>
+                </span>
+              </div>
+            </div>
+          </form>
+        </div>
+
+      </div>
+    </div>
+  </app-panel-user>
+</div>
+
+
+<!-- Global modal notification component selector for cancel and final save form-->
+<app-modal-notification (modelNotificationSuccess)="redirectTo()" (modelNotificationWarning)="alertRedirection()">
+</app-modal-notification>
